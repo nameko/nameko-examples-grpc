@@ -15,7 +15,7 @@ class productsStub(object):
       channel: A grpc.Channel.
     """
     self.get_product = channel.unary_unary(
-        '/products/get_product',
+        '/products.products/get_product',
         request_serializer=products__pb2.GetProduct.SerializeToString,
         response_deserializer=products__pb2.Product.FromString,
         )
@@ -42,5 +42,5 @@ def add_productsServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'products', rpc_method_handlers)
+      'products.products', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

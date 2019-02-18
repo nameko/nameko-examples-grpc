@@ -1,0 +1,31 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "GraphQL gateway to gRPC services",
+  "repository": "git@github.com:kooba/nameko-examples-grpc.git",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "lint": "npm run lint-prettier && npm run lint-ts",
+    "lint-ts": "tsc --noEmit && tslint --project tsconfig.json --format verbose 'src/**/*.ts'",
+    "lint-prettier": "prettier -l 'src/**/*.ts' || echo 'files are different to code formatter, run `npm run prettier` to fix'",
+    "prettier": "prettier --write 'src/**/*.ts'"
+  },
+  "author": "Jakub Borys",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/graphql": "^14.0.7",
+    "prettier": "^1.16.4",
+    "tslint": "^5.12.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "apollo-server": "^2.4.2",
+    "graphql": "^14.1.1",
+    "grpc": "^1.18.0",
+    "log4js": "^4.0.2"
+  }
+}

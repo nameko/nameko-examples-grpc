@@ -5,3 +5,5 @@ htmlcov
 .coverage
 */wheelhouse
 *.sql
+node_modules
+dist

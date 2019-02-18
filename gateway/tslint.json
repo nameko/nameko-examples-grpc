@@ -1,0 +1,23 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-airbnb",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "ordered-imports": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "no-default-export": true,
+    "member-access": false,
+    "prefer-array-literal": false,
+    "max-classes-per-file": false,
+    "align": false,
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ]
+  },
+  "rulesDirectory": []
+}
