@@ -9,7 +9,8 @@
     "outDir": "dist",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"

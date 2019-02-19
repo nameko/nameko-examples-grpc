@@ -17,8 +17,11 @@ build-proto:
 	--proto_path=products/proto \
 	--python_out=products/proto \
 	--grpc_python_out=products/proto \
-	products/proto/products.proto
+	products.proto
 	# Hack untill I figure how to invoke this piece of code:
 	# https://github.com/grpc/grpc/pull/10862/files
 	sed -i.bak 's/^\(import.*_pb2\)/from . \1/' products/proto/*.py
 	rm products/proto/*.bak
+
+start:
+	nameko run --config config.yml products.service --backdoor 3000
