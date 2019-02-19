@@ -1,28 +1,36 @@
 import { getLogger } from 'log4js';
-import { credentials } from 'grpc';
+import { loadPackageDefinition, credentials } from 'grpc';
+import * as protoLoader from '@grpc/proto-loader';
 import { promisifyAll } from 'bluebird';
 
-const messages = require('./proto/products_pb');
-const services = require('./proto/products_grpc_pb');
+const PROTO_PATH = `${__dirname}/../../products/products/proto/products.proto`;
 
 const logger = getLogger('resolvers');
 logger.level = 'debug';
 
-const stub = new services.productsClient(
+const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+  keepCase: true,
+  longs: String,
+  enums: String,
+  defaults: true,
+  oneofs: true,
+});
+
+const products: any = loadPackageDefinition(packageDefinition).products;
+
+const stub = new products.products(
   'localhost:50051',
   credentials.createInsecure(),
 );
 
 const client: any = promisifyAll(stub);
-const request = new messages.GetProduct();
 
 const resolvers = {
   Query: {
     hello: async () => {
-      request.setId('foo');
       try {
-        const response = await client.get_productAsync(request);
-        return response.getTitle();
+        const response = await client.get_productAsync({ id: 'foo' });
+        return response.title;
       } catch (error) {
         logger.error(error);
       }

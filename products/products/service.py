@@ -28,7 +28,7 @@ class ProductsService:
         # product = self.storage.get(product_id)
         # data = schemas.Product().dump(product).data
         # return Product(**data)
-        return Product(title="Bob is your uncle", passenger_capacity=101)
+        return Product(title="Bob is your aunt", passenger_capacity=101)
 
     @rpc
     def get(self, product_id):
