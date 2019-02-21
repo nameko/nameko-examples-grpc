@@ -23,12 +23,10 @@ class ProductsService:
 
     @grpc
     def get_product(self, request, context):
-        # product_id = request.id
-        logger.info(f'product id received: {request.id}')
-        # product = self.storage.get(product_id)
-        # data = schemas.Product().dump(product).data
-        # return Product(**data)
-        return Product(title="Bob is your aunt", passenger_capacity=101)
+        product_id = request.id
+        product = self.storage.get(product_id)
+        data = schemas.Product().dump(product).data
+        return Product(**data)
 
     @rpc
     def get(self, product_id):

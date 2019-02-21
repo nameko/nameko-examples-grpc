@@ -9,7 +9,7 @@ const logger = getLogger('resolvers');
 logger.level = 'debug';
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
-  keepCase: true,
+  keepCase: false,
   longs: String,
   enums: String,
   defaults: true,
@@ -27,10 +27,10 @@ const client: any = promisifyAll(stub);
 
 const resolvers = {
   Query: {
-    hello: async () => {
+    product: async (_, { id }) => {
       try {
-        const response = await client.get_productAsync({ id: 'foo' });
-        return response.title;
+        const response = await client.getProductAsync({ id });
+        return response;
       } catch (error) {
         logger.error(error);
       }

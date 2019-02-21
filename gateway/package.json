@@ -10,7 +10,9 @@
     "lint": "npm run lint-prettier && npm run lint-ts",
     "lint-ts": "tsc --noEmit && tslint --project tsconfig.json --format verbose 'src/**/*.ts'",
     "lint-prettier": "prettier -l 'src/**/*.ts' || echo 'files are different to code formatter, run `npm run prettier` to fix'",
-    "prettier": "prettier --write 'src/**/*.ts'"
+    "prettier": "prettier --write 'src/**/*.ts'",
+    "watch-ts": "tsc --watch",
+    "nodemon": "nodemon --inspect --delay 1 --ext ts --watch src dist/index.js"
   },
   "author": "Jakub Borys",
   "license": "MIT",
@@ -18,6 +20,7 @@
     "@types/graphql": "^14.0.7",
     "@types/node": "^11.9.4",
     "grpc-tools": "^1.6.6",
+    "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",

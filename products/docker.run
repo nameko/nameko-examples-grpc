@@ -2,7 +2,7 @@ FROM nameko-example-base
 
 ADD wheelhouse /var/nameko/wheelhouse
 
-COPY config.yml /var/nameko/config.yml
+COPY config.yaml /var/nameko/config.yaml
 COPY run.sh /var/nameko/run.sh
 
 RUN chmod +x /var/nameko/run.sh

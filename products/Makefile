@@ -24,4 +24,10 @@ build-proto:
 	rm products/proto/*.bak
 
 start:
-	nameko run --config config.yml products.service --backdoor 3000
+	nameko run --config config.yaml products.service --backdoor 3000
+
+# Relies on `nodemon` nodejs utility installed globally:
+# `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
+
+watch:
+	nodemon --ext py --watch products --watch config.yaml --exec "nameko run --config config.yaml products.service"
