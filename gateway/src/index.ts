@@ -10,11 +10,48 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   playground: {
-    endpoint: '/playground',
+    endpoint: '/',
     subscriptionEndpoint: '/',
+    tabs: [
+      {
+        endpoint: '/',
+        // @ts-ignore
+        name: 'GetProduct',
+        query: `query GetProduct {
+            product(id: "the_odyssey") {
+              id
+              title
+              passengerCapacity
+              maximumSpeed
+              inStock
+            }
+          }`,
+      },
+      {
+        endpoint: '/',
+        // @ts-ignore
+        name: 'CreateProduct',
+        query: `query CreateProduct {
+            product(id: "the_odyssey") {
+              id
+              title
+              passengerCapacity
+              maximumSpeed
+              inStock
+            }
+          }`,
+      },
+    ],
   },
 });
 
 server.listen().then(({ url }) => {
-  logger.info(`🚀 Server ready at ${url}`);
+  logger.info(
+    `
+    🚀
+    Server ready at ${url}
+    Access playground with query examples at ${url}playground
+    🤘
+    `,
+  );
 });
