@@ -1,56 +1,37 @@
-import { ApolloServer } from 'apollo-server';
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
 import { getLogger } from 'log4js';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
+import { exampleQueries } from './queries';
+import * as playground from 'graphql-playground-middleware-express';
 
 const logger = getLogger('index');
 logger.level = 'debug';
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  playground: {
-    endpoint: '/',
-    subscriptionEndpoint: '/',
-    tabs: [
-      {
-        endpoint: '/',
-        // @ts-ignore
-        name: 'GetProduct',
-        query: `query GetProduct {
-            product(id: "the_odyssey") {
-              id
-              title
-              passengerCapacity
-              maximumSpeed
-              inStock
-            }
-          }`,
-      },
-      {
-        endpoint: '/',
-        // @ts-ignore
-        name: 'CreateProduct',
-        query: `query CreateProduct {
-            product(id: "the_odyssey") {
-              id
-              title
-              passengerCapacity
-              maximumSpeed
-              inStock
-            }
-          }`,
-      },
-    ],
-  },
-});
+const PORT = 4000;
+const GRAPHQL_PATH = '/graphql';
+const PLAYGROUND_PATH = '/playground';
+const app = express();
 
-server.listen().then(({ url }) => {
+app.get(
+  `${PLAYGROUND_PATH}`,
+  playground.default({
+    endpoint: `${GRAPHQL_PATH}`,
+    tabs: exampleQueries(GRAPHQL_PATH),
+  }),
+);
+
+const server = new ApolloServer({ typeDefs, resolvers });
+server.applyMiddleware({ app, path: `${GRAPHQL_PATH}` });
+
+app.listen({ port: PORT }, () => {
+  logger.info(server);
   logger.info(
     `
     🚀
-    Server ready at ${url}
-    Access playground with query examples at ${url}playground
+    Server ready at http://localhost:${PORT}${server.graphqlPath}
+    Access playground with query examples at http://localhost:${PORT}${PLAYGROUND_PATH}
     🤘
     `,
   );
