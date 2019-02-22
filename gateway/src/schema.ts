@@ -3,17 +3,18 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
   type Product {
     id: ID!
-    title: String
-    passengerCapacity: Int
-    maximumSpeed: Int
-    inStock: Int
+    title: String!
+    passengerCapacity: Int!
+    maximumSpeed: Int!
+    inStock: Int!
   }
 
   type OrderDetail {
     id: ID!
-    product: Product!
-    price: String
-    quantity: Int
+    # product: Product!
+    productId: String!
+    price: String!
+    quantity: Int!
   }
 
   type Order {
@@ -36,8 +37,19 @@ const typeDefs = gql`
     inStock: Int
   }
 
+  input OrderDetailsInput {
+    productId: String!
+    price: String!
+    quantity: Int!
+  }
+
+  input OrderInput {
+    orderDetails: [OrderDetailsInput]!
+  }
+
   type Mutation {
     createProduct(input: ProductInput!): Product!
+    createOrder(input: OrderInput!): Order!
   }
 `;
 

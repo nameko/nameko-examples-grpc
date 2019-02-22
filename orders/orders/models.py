@@ -1,7 +1,7 @@
 import datetime
 
 from sqlalchemy import (
-    DECIMAL, Column, DateTime, ForeignKey, Integer,
+    DECIMAL, Column, DateTime, ForeignKey, Integer, String
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref, relationship
@@ -42,7 +42,6 @@ class OrderDetail(DeclarativeBase):
     order = relationship(
         Order, backref=backref("order_details", cascade="all, delete-orphan")
     )
-    # TODO: I think product id should be string!?
-    product_id = Column(Integer, nullable=False)
+    product_id = Column(String, nullable=False)
     price = Column(DECIMAL(18, 2), nullable=False)
     quantity = Column(Integer, nullable=False)

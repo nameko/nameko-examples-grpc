@@ -46,7 +46,7 @@ def order_data():
         "id": 1,
         "order_details": [{
             "id": 1,
-            "product_id": 1,
+            "product_id": "the_odyssey",
             "price": "20.50",
             "quantity": 10
         }]

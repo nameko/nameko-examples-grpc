@@ -1,38 +1,75 @@
+const productQueries = `mutation CreateProduct {
+  createProduct(
+    input: {
+      id:"the_odyssey",
+      title: "The Odyssey",
+      passengerCapacity: 123,
+      maximumSpeed:9,
+      inStock: 100
+    }
+  ) {
+    id
+    title
+    passengerCapacity
+    maximumSpeed
+    inStock
+  }
+}
+
+query GetProduct {
+  product(id: "the_odyssey") {
+    id
+    title
+    passengerCapacity
+    maximumSpeed
+    inStock
+  }
+}`;
+
+const orderQueries = `mutation CreateOrder {
+  createOrder(
+    input: {
+      orderDetails: {
+        productId: "goo",
+        price: "105.99",
+        quantity: 123
+      }
+    }
+  ) {
+    id
+    orderDetails {
+      id
+      productId
+      price
+      quantity
+    }
+  }
+}
+
+query GetOrder {
+  order(id: 1) {
+    id
+    orderDetails {
+      id
+      productId
+      price
+      quantity
+    }
+  }
+}
+`;
+
 const exampleQueries = graphqlPath => {
   return [
     {
       endpoint: `${graphqlPath}`,
-      name: 'CreateProduct',
-      query: `mutation Create {
-        createProduct(
-          input: {
-            id:"the_odyssey",
-            title: "The Odyssey",
-            passengerCapacity: 123,
-            maximumSpeed:9,
-            inStock: 100
-          }
-        ) {
-          id
-          title
-          passengerCapacity
-          maximumSpeed
-          inStock
-        }
-      }`,
+      name: 'Products',
+      query: productQueries,
     },
     {
       endpoint: `${graphqlPath}`,
-      name: 'GetProduct',
-      query: `query GetProduct {
-        product(id: "the_odyssey") {
-          id
-          title
-          passengerCapacity
-          maximumSpeed
-          inStock
-        }
-      }`,
+      name: 'Orders',
+      query: orderQueries,
     },
   ];
 };

@@ -51,3 +51,10 @@ proto:
 	@# https://github.com/grpc/grpc/pull/10862/files
 	@sed -i.bak 's/^\(import.*_pb2\)/from . \1/' orders/orders/*grpc.py
 	@rm orders/orders/*.bak
+
+# Relies on `nodemon` nodejs utility installed globally:
+# `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
+
+develop-orders: proto
+	nodemon --ext py --watch orders/orders --watch orders/config.yaml \
+	--exec "nameko run --config orders/config.yaml orders.service"
