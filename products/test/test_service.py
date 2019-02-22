@@ -32,7 +32,7 @@ def client():
 
 
 def test_create_product(redis_client, service_container, client, product):
-    new_product = client.create(Product(
+    new_product = client.create_product(Product(
         id=product["id"],
         title=product["title"],
         passenger_capacity=product["passenger_capacity"],
@@ -46,7 +46,7 @@ def test_create_product(redis_client, service_container, client, product):
 
 def test_get_product(create_product, service_container, client):
     stored_product = create_product()
-    product = client.get(GetProduct(id=stored_product["id"]))
+    product = client.get_product(GetProduct(id=stored_product["id"]))
 
     assert stored_product["id"] == product.id
     assert stored_product["title"] == product.title

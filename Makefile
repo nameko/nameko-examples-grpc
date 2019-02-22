@@ -39,3 +39,15 @@ docker-login:
 
 push-images: build
 	for image in $(IMAGES) ; do make -C $$image push-image; done
+
+.PHONY: proto
+proto:
+	python -m grpc_tools.protoc \
+	--proto_path=proto \
+	--python_out=orders/orders \
+	--grpc_python_out=orders/orders \
+	orders.proto
+	@# Hack untill I figure how to invoke this piece of code:
+	@# https://github.com/grpc/grpc/pull/10862/files
+	@sed -i.bak 's/^\(import.*_pb2\)/from . \1/' orders/orders/*grpc.py
+	@rm orders/orders/*.bak

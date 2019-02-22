@@ -1,5 +1,3 @@
-import logging
-
 from nameko.events import event_handler
 from nameko_grpc.entrypoint import Grpc
 
@@ -7,9 +5,6 @@ from .proto.products_pb2_grpc import productsStub
 from .proto.products_pb2 import Product, Products
 
 from products import dependencies, schemas
-
-
-logger = logging.getLogger(__name__)
 
 grpc = Grpc.implementing(productsStub)
 
@@ -35,6 +30,7 @@ class ProductsService:
     def get_product(self, request, context):
         product_id = request.id
         product = self.storage.get(product_id)
+        # TODO: give up on schemas usage
         data = schemas.Product().dump(product).data
         return Product(**data)
 

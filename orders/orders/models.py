@@ -4,7 +4,7 @@ from sqlalchemy import (
     DECIMAL, Column, DateTime, ForeignKey, Integer,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
 
 
 class Base(object):
@@ -39,7 +39,10 @@ class OrderDetail(DeclarativeBase):
         ForeignKey("orders.id", name="fk_order_details_orders"),
         nullable=False
     )
-    order = relationship(Order, backref="order_details")
+    order = relationship(
+        Order, backref=backref("order_details", cascade="all, delete-orphan")
+    )
+    # TODO: I think product id should be string!?
     product_id = Column(Integer, nullable=False)
     price = Column(DECIMAL(18, 2), nullable=False)
     quantity = Column(Integer, nullable=False)

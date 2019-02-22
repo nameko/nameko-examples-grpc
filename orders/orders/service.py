@@ -1,10 +1,15 @@
 from nameko.events import EventDispatcher
-from nameko.rpc import rpc
+from nameko_grpc.entrypoint import Grpc
 from nameko_sqlalchemy import DatabaseSession
 
-from orders.exceptions import NotFound
-from orders.models import DeclarativeBase, Order, OrderDetail
-from orders.schemas import OrderSchema
+from .exceptions import NotFound
+from .models import DeclarativeBase, Order, OrderDetail
+from .schemas import OrderSchema
+
+from .orders_pb2_grpc import ordersStub
+from .orders_pb2 import OrderResponse, OrderDetailResponse, OrderDeletedResponse
+
+grpc = Grpc.implementing(ordersStub)
 
 
 class OrdersService:
@@ -13,56 +18,72 @@ class OrdersService:
     db = DatabaseSession(DeclarativeBase)
     event_dispatcher = EventDispatcher()
 
-    @rpc
-    def get_order(self, order_id):
-        order = self.db.query(Order).get(order_id)
+    @grpc
+    def get_order(self, request, context):
+        order = self.db.query(Order).get(request.id)
 
         if not order:
-            raise NotFound('Order with id {} not found'.format(order_id))
+            raise NotFound('Order with id {} not found'.format(request.id))
 
-        return OrderSchema().dump(order).data
+        return self._order_response(order)
 
-    @rpc
-    def create_order(self, order_details):
+    @grpc
+    def create_order(self, request, context):
         order = Order(
             order_details=[
                 OrderDetail(
-                    product_id=order_detail['product_id'],
-                    price=order_detail['price'],
-                    quantity=order_detail['quantity']
+                    product_id=order_detail.product_id,
+                    price=order_detail.price,
+                    quantity=order_detail.quantity,
                 )
-                for order_detail in order_details
+                for order_detail in request.order_details
             ]
         )
         self.db.add(order)
         self.db.commit()
 
-        order = OrderSchema().dump(order).data
+        order_created = OrderSchema().dump(order).data
 
         self.event_dispatcher('order_created', {
-            'order': order,
+            'order': order_created,
         })
 
-        return order
+        return self._order_response(order)
 
-    @rpc
-    def update_order(self, order):
+    @grpc
+    def update_order(self, request, context):
         order_details = {
-            order_details['id']: order_details
-            for order_details in order['order_details']
+            order_details.id: order_details
+            for order_details in request.order_details
         }
 
-        order = self.db.query(Order).get(order['id'])
+        order = self.db.query(Order).get(request.id)
 
         for order_detail in order.order_details:
-            order_detail.price = order_details[order_detail.id]['price']
-            order_detail.quantity = order_details[order_detail.id]['quantity']
+            order_detail.price = order_details[order_detail.id].price
+            order_detail.quantity = order_details[order_detail.id].quantity
 
         self.db.commit()
-        return OrderSchema().dump(order).data
 
-    @rpc
-    def delete_order(self, order_id):
-        order = self.db.query(Order).get(order_id)
+        return self._order_response(order)
+
+    @grpc
+    def delete_order(self, request, context):
+        order = self.db.query(Order).get(request.id)
         self.db.delete(order)
         self.db.commit()
+        return OrderDeletedResponse()
+
+    def _order_response(self, order):
+        return OrderResponse(
+            id=order.id,
+            order_details=[
+                OrderDetailResponse(
+                    id=order_detail.id,
+                    product_id=order_detail.product_id,
+                    price=str(order_detail.price),
+                    quantity=order_detail.quantity,
+                )
+                for order_detail in order.order_details
+            ]
+        )
