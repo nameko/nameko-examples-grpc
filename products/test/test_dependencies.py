@@ -39,12 +39,12 @@ def test_create(product, redis_client, storage):
 
     stored_product = redis_client.hgetall('products:LZ127')
 
-    assert product['id'] == stored_product[b'id'].decode('utf-8')
-    assert product['title'] == stored_product[b'title'].decode('utf-8')
-    assert product['maximum_speed'] == int(stored_product[b'maximum_speed'])
+    assert product['id'] == stored_product['id']
+    assert product['title'] == stored_product['title']
+    assert product['maximum_speed'] == int(stored_product['maximum_speed'])
     assert product['passenger_capacity'] == (
-        int(stored_product[b'passenger_capacity']))
-    assert product['in_stock'] == int(stored_product[b'in_stock'])
+        int(stored_product['passenger_capacity']))
+    assert product['in_stock'] == int(stored_product['in_stock'])
 
 
 def test_decrement_stock(storage, create_product, redis_client):
@@ -58,6 +58,6 @@ def test_decrement_stock(storage, create_product, redis_client):
     product_one, product_two, product_three = [
         redis_client.hgetall('products:{}'.format(id_))
         for id_ in (1, 2, 3)]
-    assert b'10' == product_one[b'in_stock']
-    assert b'7' == product_two[b'in_stock']
-    assert b'12' == product_three[b'in_stock']
+    assert '10' == product_one['in_stock']
+    assert '7' == product_two['in_stock']
+    assert '12' == product_three['in_stock']

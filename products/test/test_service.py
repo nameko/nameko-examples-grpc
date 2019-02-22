@@ -6,8 +6,8 @@ from nameko.testing.services import entrypoint_waiter
 
 from products.service import ProductsService
 from nameko_grpc.client import Client
-from products.proto.products_pb2 import GetProduct, GetProducts, Product
-from products.proto.products_pb2_grpc import productsStub
+from products.products_pb2 import GetProduct, GetProducts, Product
+from products.products_pb2_grpc import productsStub
 
 
 assert_items_equal = TestCase().assertCountEqual
@@ -90,6 +90,6 @@ def test_handle_order_created(
     product_one, product_two, product_three = [
         redis_client.hgetall('products:{}'.format(id_))
         for id_ in ('LZ127', 'LZ129', 'LZ130')]
-    assert b'6' == product_one[b'in_stock']
-    assert b'9' == product_two[b'in_stock']
-    assert b'12' == product_three[b'in_stock']
+    assert '6' == product_one['in_stock']
+    assert '9' == product_two['in_stock']
+    assert '12' == product_three['in_stock']

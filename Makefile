@@ -40,8 +40,18 @@ docker-login:
 push-images: build
 	for image in $(IMAGES) ; do make -C $$image push-image; done
 
-.PHONY: proto
-proto:
+products-proto:
+	python -m grpc_tools.protoc \
+	--proto_path=proto \
+	--python_out=products/products \
+	--grpc_python_out=products/products \
+	products.proto
+	@# Hack untill I figure how to invoke this piece of code:
+	@# https://github.com/grpc/grpc/pull/10862/files
+	@sed -i.bak 's/^\(import.*_pb2\)/from . \1/' products/products/*grpc.py
+	@rm products/products/*.bak
+
+orders-proto:
 	python -m grpc_tools.protoc \
 	--proto_path=proto \
 	--python_out=orders/orders \
@@ -51,6 +61,9 @@ proto:
 	@# https://github.com/grpc/grpc/pull/10862/files
 	@sed -i.bak 's/^\(import.*_pb2\)/from . \1/' orders/orders/*grpc.py
 	@rm orders/orders/*.bak
+
+.PHONY: proto
+proto: products-proto orders-proto
 
 # Relies on `nodemon` nodejs utility installed globally:
 # `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
