@@ -5,6 +5,7 @@ import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { exampleQueries } from './queries';
 import * as playground from 'graphql-playground-middleware-express';
+import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 const logger = getLogger('index');
 logger.level = 'debug';
@@ -21,6 +22,8 @@ app.get(
     tabs: exampleQueries(GRAPHQL_PATH),
   }),
 );
+
+app.use('/voyager', voyagerMiddleware({ endpointUrl: `${GRAPHQL_PATH}` }));
 
 const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app, path: `${GRAPHQL_PATH}` });

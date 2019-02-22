@@ -1,13 +1,16 @@
-from nameko.testing.services import entrypoint_hook
-from nameko.standalone.events import event_dispatcher
-from nameko.testing.services import entrypoint_waiter
 import pytest
 
-from products.dependencies import NotFound
+from unittest import TestCase
+from nameko.standalone.events import event_dispatcher
+from nameko.testing.services import entrypoint_waiter
+
 from products.service import ProductsService
 from nameko_grpc.client import Client
-from products.proto.products_pb2 import GetProduct, Product
+from products.proto.products_pb2 import GetProduct, Product, Empty
 from products.proto.products_pb2_grpc import productsStub
+
+
+assert_items_equal = TestCase().assertCountEqual
 
 
 @pytest.fixture
@@ -28,17 +31,6 @@ def client():
     client.stop()
 
 
-def test_get_product(create_product, service_container, client):
-    stored_product = create_product()
-    product = client.get(GetProduct(id=stored_product["id"]))
-
-    assert stored_product["id"] == product.id
-    assert stored_product["title"] == product.title
-    assert stored_product["passenger_capacity"] == product.passenger_capacity
-    assert stored_product["maximum_speed"] == product.maximum_speed
-    assert stored_product["in_stock"] == product.in_stock
-
-
 def test_create_product(redis_client, service_container, client, product):
     new_product = client.create(Product(
         id=product["id"],
@@ -52,27 +44,29 @@ def test_create_product(redis_client, service_container, client, product):
         assert stored_product[key] == str(getattr(new_product, key))
 
 
-def test_get_product_fails_on_not_found(service_container):
+def test_get_product(create_product, service_container, client):
+    stored_product = create_product()
+    product = client.get(GetProduct(id=stored_product["id"]))
 
-    with pytest.raises(NotFound):
-        with entrypoint_hook(service_container, 'get') as get:
-            get(111)
-
-
-def test_list_products(products, service_container):
-
-    with entrypoint_hook(service_container, 'list') as list_:
-        listed_products = list_()
-
-    assert products == sorted(listed_products, key=lambda p: p['id'])
+    assert stored_product["id"] == product.id
+    assert stored_product["title"] == product.title
+    assert stored_product["passenger_capacity"] == product.passenger_capacity
+    assert stored_product["maximum_speed"] == product.maximum_speed
+    assert stored_product["in_stock"] == product.in_stock
 
 
-def test_list_products_when_empty(service_container):
-
-    with entrypoint_hook(service_container, 'list') as list_:
-        listed_products = list_()
-
-    assert [] == listed_products
+def test_list_products(products, service_container, client):
+    product_list = [
+        {
+            "id": product.id,
+            "title": product.title,
+            "passenger_capacity": product.passenger_capacity,
+            "maximum_speed": product.maximum_speed,
+            "in_stock": product.in_stock,
+        }
+        for product in client.list_products(Empty()).products
+    ]
+    assert_items_equal(product_list, products)
 
 
 def test_handle_order_created(

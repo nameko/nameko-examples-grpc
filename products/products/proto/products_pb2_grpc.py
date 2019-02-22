@@ -14,15 +14,20 @@ class productsStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.get = channel.unary_unary(
-        '/products.products/get',
+    self.get_product = channel.unary_unary(
+        '/products.products/get_product',
         request_serializer=products__pb2.GetProduct.SerializeToString,
         response_deserializer=products__pb2.Product.FromString,
         )
-    self.create = channel.unary_unary(
-        '/products.products/create',
+    self.create_product = channel.unary_unary(
+        '/products.products/create_product',
         request_serializer=products__pb2.Product.SerializeToString,
         response_deserializer=products__pb2.Product.FromString,
+        )
+    self.list_products = channel.unary_unary(
+        '/products.products/list_products',
+        request_serializer=products__pb2.Empty.SerializeToString,
+        response_deserializer=products__pb2.Products.FromString,
         )
 
 
@@ -30,14 +35,21 @@ class productsServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def get(self, request, context):
+  def get_product(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def create(self, request, context):
+  def create_product(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def list_products(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -47,15 +59,20 @@ class productsServicer(object):
 
 def add_productsServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'get': grpc.unary_unary_rpc_method_handler(
-          servicer.get,
+      'get_product': grpc.unary_unary_rpc_method_handler(
+          servicer.get_product,
           request_deserializer=products__pb2.GetProduct.FromString,
           response_serializer=products__pb2.Product.SerializeToString,
       ),
-      'create': grpc.unary_unary_rpc_method_handler(
-          servicer.create,
+      'create_product': grpc.unary_unary_rpc_method_handler(
+          servicer.create_product,
           request_deserializer=products__pb2.Product.FromString,
           response_serializer=products__pb2.Product.SerializeToString,
+      ),
+      'list_products': grpc.unary_unary_rpc_method_handler(
+          servicer.list_products,
+          request_deserializer=products__pb2.Empty.FromString,
+          response_serializer=products__pb2.Products.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

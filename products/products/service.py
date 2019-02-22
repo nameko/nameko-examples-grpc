@@ -1,11 +1,10 @@
 import logging
 
 from nameko.events import event_handler
-from nameko.rpc import rpc
 from nameko_grpc.entrypoint import Grpc
 
 from .proto.products_pb2_grpc import productsStub
-from .proto.products_pb2 import Product
+from .proto.products_pb2 import Product, Products
 
 from products import dependencies, schemas
 
@@ -22,7 +21,7 @@ class ProductsService:
     storage = dependencies.Storage()
 
     @grpc
-    def create(self, request, context):
+    def create_product(self, request, context):
         self.storage.create({
             "id": request.id,
             "title": request.title,
@@ -33,16 +32,16 @@ class ProductsService:
         return request
 
     @grpc
-    def get(self, request, context):
+    def get_product(self, request, context):
         product_id = request.id
         product = self.storage.get(product_id)
         data = schemas.Product().dump(product).data
         return Product(**data)
 
-    @rpc
-    def list(self):
+    @grpc
+    def list_products(self, request, context):
         products = self.storage.list()
-        return schemas.Product(many=True).dump(products).data
+        return Products(products=[{**product} for product in products])
 
     @event_handler('orders', 'order_created')
     def handle_order_created(self, payload):

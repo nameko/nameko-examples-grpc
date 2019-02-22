@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='products',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0eproducts.proto\x12\x08products\"i\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x1a\n\x12passenger_capacity\x18\x03 \x01(\x05\x12\x15\n\rmaximum_speed\x18\x04 \x01(\x05\x12\x10\n\x08in_stock\x18\x05 \x01(\x05\"\x18\n\nGetProduct\x12\n\n\x02id\x18\x01 \x01(\t2j\n\x08products\x12.\n\x03get\x12\x14.products.GetProduct\x1a\x11.products.Product\x12.\n\x06\x63reate\x12\x11.products.Product\x1a\x11.products.Productb\x06proto3')
+  serialized_pb=_b('\n\x0eproducts.proto\x12\x08products\"i\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x1a\n\x12passenger_capacity\x18\x03 \x01(\x05\x12\x15\n\rmaximum_speed\x18\x04 \x01(\x05\x12\x10\n\x08in_stock\x18\x05 \x01(\x05\"/\n\x08Products\x12#\n\x08products\x18\x01 \x03(\x0b\x32\x11.products.Product\"\x18\n\nGetProduct\x12\n\n\x02id\x18\x01 \x01(\t\"\x07\n\x05\x45mpty2\xb0\x01\n\x08products\x12\x36\n\x0bget_product\x12\x14.products.GetProduct\x1a\x11.products.Product\x12\x36\n\x0e\x63reate_product\x12\x11.products.Product\x1a\x11.products.Product\x12\x34\n\rlist_products\x12\x0f.products.Empty\x1a\x12.products.Productsb\x06proto3')
 )
 
 
@@ -84,6 +84,37 @@ _PRODUCT = _descriptor.Descriptor(
 )
 
 
+_PRODUCTS = _descriptor.Descriptor(
+  name='Products',
+  full_name='products.Products',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='products', full_name='products.Products.products', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=135,
+  serialized_end=182,
+)
+
+
 _GETPRODUCT = _descriptor.Descriptor(
   name='GetProduct',
   full_name='products.GetProduct',
@@ -110,12 +141,39 @@ _GETPRODUCT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=135,
-  serialized_end=159,
+  serialized_start=184,
+  serialized_end=208,
 )
 
+
+_EMPTY = _descriptor.Descriptor(
+  name='Empty',
+  full_name='products.Empty',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=210,
+  serialized_end=217,
+)
+
+_PRODUCTS.fields_by_name['products'].message_type = _PRODUCT
 DESCRIPTOR.message_types_by_name['Product'] = _PRODUCT
+DESCRIPTOR.message_types_by_name['Products'] = _PRODUCTS
 DESCRIPTOR.message_types_by_name['GetProduct'] = _GETPRODUCT
+DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Product = _reflection.GeneratedProtocolMessageType('Product', (_message.Message,), dict(
@@ -125,12 +183,26 @@ Product = _reflection.GeneratedProtocolMessageType('Product', (_message.Message,
   ))
 _sym_db.RegisterMessage(Product)
 
+Products = _reflection.GeneratedProtocolMessageType('Products', (_message.Message,), dict(
+  DESCRIPTOR = _PRODUCTS,
+  __module__ = 'products_pb2'
+  # @@protoc_insertion_point(class_scope:products.Products)
+  ))
+_sym_db.RegisterMessage(Products)
+
 GetProduct = _reflection.GeneratedProtocolMessageType('GetProduct', (_message.Message,), dict(
   DESCRIPTOR = _GETPRODUCT,
   __module__ = 'products_pb2'
   # @@protoc_insertion_point(class_scope:products.GetProduct)
   ))
 _sym_db.RegisterMessage(GetProduct)
+
+Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), dict(
+  DESCRIPTOR = _EMPTY,
+  __module__ = 'products_pb2'
+  # @@protoc_insertion_point(class_scope:products.Empty)
+  ))
+_sym_db.RegisterMessage(Empty)
 
 
 
@@ -140,12 +212,12 @@ _PRODUCTS = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=161,
-  serialized_end=267,
+  serialized_start=220,
+  serialized_end=396,
   methods=[
   _descriptor.MethodDescriptor(
-    name='get',
-    full_name='products.products.get',
+    name='get_product',
+    full_name='products.products.get_product',
     index=0,
     containing_service=None,
     input_type=_GETPRODUCT,
@@ -153,12 +225,21 @@ _PRODUCTS = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='create',
-    full_name='products.products.create',
+    name='create_product',
+    full_name='products.products.create_product',
     index=1,
     containing_service=None,
     input_type=_PRODUCT,
     output_type=_PRODUCT,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='list_products',
+    full_name='products.products.list_products',
+    index=2,
+    containing_service=None,
+    input_type=_EMPTY,
+    output_type=_PRODUCTS,
     serialized_options=None,
   ),
 ])

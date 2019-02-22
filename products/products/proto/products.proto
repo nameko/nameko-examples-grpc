@@ -3,8 +3,9 @@ syntax = "proto3";
 package products;
 
 service products {
-    rpc get(GetProduct) returns (Product);
-    rpc create(Product) returns (Product);
+    rpc get_product(GetProduct) returns (Product);
+    rpc create_product(Product) returns (Product);
+    rpc list_products(Empty) returns (Products);
 }
 
 message Product {
@@ -15,6 +16,12 @@ message Product {
     int32 in_stock = 5;
 }
 
+message Products {
+    repeated Product products = 1;
+}
+
 message GetProduct {
     string id = 1;
 }
+
+message Empty {}

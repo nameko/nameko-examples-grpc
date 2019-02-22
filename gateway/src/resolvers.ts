@@ -29,8 +29,17 @@ const resolvers = {
   Query: {
     product: async (_, { id }) => {
       try {
-        const response = await productsGrpcClient.getAsync({ id });
+        const response = await productsGrpcClient.getProductAsync({ id });
         return response;
+      } catch (error) {
+        logger.error(error);
+      }
+    },
+    products: async () => {
+      try {
+        const response = await productsGrpcClient.listProductsAsync({});
+        logger.info(response.products);
+        return response.products;
       } catch (error) {
         logger.error(error);
       }
@@ -39,7 +48,9 @@ const resolvers = {
   Mutation: {
     createProduct: async (_, { input }) => {
       try {
-        const response = await productsGrpcClient.createAsync({ ...input });
+        const response = await productsGrpcClient.createProductAsync({
+          ...input,
+        });
         return response;
       } catch (error) {
         logger.error(error);

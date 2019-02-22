@@ -2,9 +2,17 @@ const exampleQueries = graphqlPath => {
   return [
     {
       endpoint: `${graphqlPath}`,
-      name: 'GetProduct',
-      query: `query GetProduct {
-        product(id: "the_odyssey") {
+      name: 'CreateProduct',
+      query: `mutation Create {
+        createProduct(
+          input: {
+            id:"the_odyssey",
+            title: "The Odyssey",
+            passengerCapacity: 123,
+            maximumSpeed:9,
+            inStock: 100
+          }
+        ) {
           id
           title
           passengerCapacity
@@ -15,8 +23,8 @@ const exampleQueries = graphqlPath => {
     },
     {
       endpoint: `${graphqlPath}`,
-      name: 'CreateProduct',
-      query: `query CreateProduct {
+      name: 'GetProduct',
+      query: `query GetProduct {
         product(id: "the_odyssey") {
           id
           title

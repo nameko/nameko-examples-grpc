@@ -14,7 +14,7 @@ setup(
     ],
     extras_require={
         'dev': [
-            'pytest==3.1.1',
+            'pytest==4.3.0',
             'coverage==4.4.1',
             'flake8==3.3.0',
             "grpcio-tools",
