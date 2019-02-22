@@ -1,30 +1,8 @@
 import { getLogger } from 'log4js';
-import { loadPackageDefinition, credentials } from 'grpc';
-import * as protoLoader from '@grpc/proto-loader';
-import { promisifyAll } from 'bluebird';
-import { ordersGrpcClient } from './clients';
-
-const PRODUCTS_PROTO_PATH = `${__dirname}/../../products/products/proto/products.proto`;
+import { ordersGrpcClient, productsGrpcClient } from './clients';
 
 const logger = getLogger('resolvers');
 logger.level = 'debug';
-
-const productsPackageDefinition = protoLoader.loadSync(PRODUCTS_PROTO_PATH, {
-  keepCase: false,
-  longs: String,
-  enums: String,
-  defaults: true,
-  oneofs: true,
-});
-
-const products: any = loadPackageDefinition(productsPackageDefinition).products;
-
-const productsStub = new products.products(
-  'localhost:50051',
-  credentials.createInsecure(),
-);
-
-const productsGrpcClient: any = promisifyAll(productsStub);
 
 const resolvers = {
   Query: {

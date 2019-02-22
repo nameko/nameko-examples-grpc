@@ -71,3 +71,9 @@ proto: products-proto orders-proto
 develop-orders: proto
 	nodemon --ext py --watch orders/orders --watch orders/config.yaml \
 	--exec "nameko run --config orders/config.yaml orders.service"
+
+develop-products: proto
+	nodemon --ext py --watch products/products --watch products/config.yaml --exec "nameko run --config products/config.yaml products.service"
+
+develop:
+	$(MAKE) -j2 develop-orders develop-products
