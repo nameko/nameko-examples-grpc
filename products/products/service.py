@@ -22,26 +22,27 @@ class ProductsService:
     storage = dependencies.Storage()
 
     @grpc
-    def get_product(self, request, context):
+    def create(self, request, context):
+        self.storage.create({
+            "id": request.id,
+            "title": request.title,
+            "passenger_capacity": request.passenger_capacity,
+            "maximum_speed": request.maximum_speed,
+            "in_stock": request.in_stock,
+        })
+        return request
+
+    @grpc
+    def get(self, request, context):
         product_id = request.id
         product = self.storage.get(product_id)
         data = schemas.Product().dump(product).data
         return Product(**data)
 
     @rpc
-    def get(self, product_id):
-        product = self.storage.get(product_id)
-        return schemas.Product().dump(product).data
-
-    @rpc
     def list(self):
         products = self.storage.list()
         return schemas.Product(many=True).dump(products).data
-
-    @rpc
-    def create(self, product):
-        product = schemas.Product(strict=True).load(product).data
-        self.storage.create(product)
 
     @event_handler('orders', 'order_created')
     def handle_order_created(self, payload):

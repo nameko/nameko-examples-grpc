@@ -29,5 +29,5 @@ start:
 # Relies on `nodemon` nodejs utility installed globally:
 # `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
 
-watch:
+develop:
 	nodemon --ext py --watch products --watch config.yaml --exec "nameko run --config config.yaml products.service"

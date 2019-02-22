@@ -6,7 +6,7 @@ from products.dependencies import REDIS_URI_KEY
 
 @pytest.fixture
 def redis_config():
-    return {REDIS_URI_KEY: 'redis://localhost:6379/11'}
+    return {REDIS_URI_KEY: 'redis://user:password@localhost:6379/11'}
 
 
 @pytest.fixture
@@ -18,7 +18,9 @@ def config(rabbit_config, redis_config):
 
 @pytest.yield_fixture
 def redis_client(config):
-    client = redis.StrictRedis.from_url(config.get(REDIS_URI_KEY))
+    client = redis.StrictRedis.from_url(
+        config.get(REDIS_URI_KEY), decode_responses=True
+    )
     yield client
     client.flushdb()
 

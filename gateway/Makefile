@@ -15,3 +15,17 @@ watch-ts:
 
 develop: build
 	$(MAKE) -j2 nodemon watch-ts
+
+# queries
+
+create-product:
+	curl 'localhost:4000/graphql' -H 'Content-Type: application/json' -d \
+	'{"query":" mutation Create { createProduct( \
+	input: {id:\"foo_id\", title: \"foo title\", passengerCapacity: 123, maximumSpeed:9, inStock: 100} ) \
+	{ id title passengerCapacity maximumSpeed inStock } \
+	}"}'
+
+get-product:
+	curl 'localhost:4000/graphql' -H 'Content-Type: application/json' -d \
+	'{"query":"query GetProduct {product(id: \"foo_id\") \
+	{id title passengerCapacity maximumSpeed inStock}}"}'

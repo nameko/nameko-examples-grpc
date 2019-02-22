@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='products',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0eproducts.proto\x12\x08products\"i\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x1a\n\x12passenger_capacity\x18\x03 \x01(\x05\x12\x15\n\rmaximum_speed\x18\x04 \x01(\x05\x12\x10\n\x08in_stock\x18\x05 \x01(\x05\"\x18\n\nGetProduct\x12\n\n\x02id\x18\x01 \x01(\t2B\n\x08products\x12\x36\n\x0bget_product\x12\x14.products.GetProduct\x1a\x11.products.Productb\x06proto3')
+  serialized_pb=_b('\n\x0eproducts.proto\x12\x08products\"i\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x1a\n\x12passenger_capacity\x18\x03 \x01(\x05\x12\x15\n\rmaximum_speed\x18\x04 \x01(\x05\x12\x10\n\x08in_stock\x18\x05 \x01(\x05\"\x18\n\nGetProduct\x12\n\n\x02id\x18\x01 \x01(\t2j\n\x08products\x12.\n\x03get\x12\x14.products.GetProduct\x1a\x11.products.Product\x12.\n\x06\x63reate\x12\x11.products.Product\x1a\x11.products.Productb\x06proto3')
 )
 
 
@@ -141,14 +141,23 @@ _PRODUCTS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=161,
-  serialized_end=227,
+  serialized_end=267,
   methods=[
   _descriptor.MethodDescriptor(
-    name='get_product',
-    full_name='products.products.get_product',
+    name='get',
+    full_name='products.products.get',
     index=0,
     containing_service=None,
     input_type=_GETPRODUCT,
+    output_type=_PRODUCT,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='create',
+    full_name='products.products.create',
+    index=1,
+    containing_service=None,
+    input_type=_PRODUCT,
     output_type=_PRODUCT,
     serialized_options=None,
   ),

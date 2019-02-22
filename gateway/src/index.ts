@@ -26,7 +26,6 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.applyMiddleware({ app, path: `${GRAPHQL_PATH}` });
 
 app.listen({ port: PORT }, () => {
-  logger.info(server);
   logger.info(
     `
     🚀

@@ -14,9 +14,14 @@ class productsStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.get_product = channel.unary_unary(
-        '/products.products/get_product',
+    self.get = channel.unary_unary(
+        '/products.products/get',
         request_serializer=products__pb2.GetProduct.SerializeToString,
+        response_deserializer=products__pb2.Product.FromString,
+        )
+    self.create = channel.unary_unary(
+        '/products.products/create',
+        request_serializer=products__pb2.Product.SerializeToString,
         response_deserializer=products__pb2.Product.FromString,
         )
 
@@ -25,7 +30,14 @@ class productsServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def get_product(self, request, context):
+  def get(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def create(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -35,9 +47,14 @@ class productsServicer(object):
 
 def add_productsServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'get_product': grpc.unary_unary_rpc_method_handler(
-          servicer.get_product,
+      'get': grpc.unary_unary_rpc_method_handler(
+          servicer.get,
           request_deserializer=products__pb2.GetProduct.FromString,
+          response_serializer=products__pb2.Product.SerializeToString,
+      ),
+      'create': grpc.unary_unary_rpc_method_handler(
+          servicer.create,
+          request_deserializer=products__pb2.Product.FromString,
           response_serializer=products__pb2.Product.SerializeToString,
       ),
   }

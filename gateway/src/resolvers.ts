@@ -18,18 +18,28 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const products: any = loadPackageDefinition(packageDefinition).products;
 
-const stub = new products.products(
+const productsStub = new products.products(
   'localhost:50051',
   credentials.createInsecure(),
 );
 
-const client: any = promisifyAll(stub);
+const productsGrpcClient: any = promisifyAll(productsStub);
 
 const resolvers = {
   Query: {
     product: async (_, { id }) => {
       try {
-        const response = await client.getProductAsync({ id });
+        const response = await productsGrpcClient.getAsync({ id });
+        return response;
+      } catch (error) {
+        logger.error(error);
+      }
+    },
+  },
+  Mutation: {
+    createProduct: async (_, { input }) => {
+      try {
+        const response = await productsGrpcClient.createAsync({ ...input });
         return response;
       } catch (error) {
         logger.error(error);
