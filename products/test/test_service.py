@@ -6,7 +6,7 @@ from nameko.testing.services import entrypoint_waiter
 
 from products.service import ProductsService
 from nameko_grpc.client import Client
-from products.proto.products_pb2 import GetProduct, Product, Empty
+from products.proto.products_pb2 import GetProduct, GetProducts, Product
 from products.proto.products_pb2_grpc import productsStub
 
 
@@ -64,7 +64,7 @@ def test_list_products(products, service_container, client):
             "maximum_speed": product.maximum_speed,
             "in_stock": product.in_stock,
         }
-        for product in client.list_products(Empty()).products
+        for product in client.list_products(GetProducts()).products
     ]
     assert_items_equal(product_list, products)
 

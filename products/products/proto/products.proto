@@ -5,7 +5,7 @@ package products;
 service products {
     rpc get_product(GetProduct) returns (Product);
     rpc create_product(Product) returns (Product);
-    rpc list_products(Empty) returns (Products);
+    rpc list_products(GetProducts) returns (Products);
 }
 
 message Product {
@@ -24,4 +24,4 @@ message GetProduct {
     string id = 1;
 }
 
-message Empty {}
+message GetProducts {}

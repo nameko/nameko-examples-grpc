@@ -26,7 +26,7 @@ class productsStub(object):
         )
     self.list_products = channel.unary_unary(
         '/products.products/list_products',
-        request_serializer=products__pb2.Empty.SerializeToString,
+        request_serializer=products__pb2.GetProducts.SerializeToString,
         response_deserializer=products__pb2.Products.FromString,
         )
 
@@ -71,7 +71,7 @@ def add_productsServicer_to_server(servicer, server):
       ),
       'list_products': grpc.unary_unary_rpc_method_handler(
           servicer.list_products,
-          request_deserializer=products__pb2.Empty.FromString,
+          request_deserializer=products__pb2.GetProducts.FromString,
           response_serializer=products__pb2.Products.SerializeToString,
       ),
   }
