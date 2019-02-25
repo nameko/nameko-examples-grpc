@@ -1,0 +1,14 @@
+[run]
+concurrency = eventlet
+
+omit =
+	*/test/*
+	*/setup.py
+	*/*pb2*
+
+source =
+	products/products
+	orders/orders
+
+[html]
+directory = htmlcov

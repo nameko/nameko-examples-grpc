@@ -4,7 +4,7 @@ from nameko_grpc.entrypoint import Grpc
 from .products_pb2_grpc import productsStub
 from .products_pb2 import Product, Products
 
-from products import dependencies, schemas
+from products import dependencies
 
 grpc = Grpc.implementing(productsStub)
 
@@ -32,9 +32,7 @@ class ProductsService:
     def get_product(self, request, context):
         product_id = request.id
         product = self.storage.get(product_id)
-        # TODO: give up on schemas usage
-        data = schemas.Product().dump(product).data
-        return Product(**data)
+        return Product(**product)
 
     @grpc
     def list_products(self, request, context):

@@ -15,7 +15,8 @@ coverage-report:
 	coverage report -m
 
 test:
-	flake8 orders products gateway
+	rm .coverage || true
+	flake8 orders products
 	coverage run --append -m pytest orders/test $(ARGS)
 	coverage run --append -m pytest products/test $(ARGS)
 
