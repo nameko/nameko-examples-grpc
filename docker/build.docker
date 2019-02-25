@@ -1,0 +1,22 @@
+FROM nameko-examples-grpc-base
+
+RUN apk update && \
+    apk upgrade && \
+    apk --no-cache add alpine-sdk python3-dev@edge \
+    postgresql-dev@edge libffi-dev openssl-dev automake \
+    autoconf libtool patchelf && \
+    rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+
+RUN . /appenv/bin/activate; \
+    pip install auditwheel
+
+ENV WHEELHOUSE=/wheelhouse
+ENV PIP_WHEEL_DIR=/wheelhouse
+ENV PIP_FIND_LINKS=/wheelhouse
+
+VOLUME /wheelhouse
+VOLUME /application
+
+CMD . /appenv/bin/activate; \
+    cd /application; \
+    pip wheel ".[dev]"

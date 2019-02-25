@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='nameko-examples-products',
+    name='nameko-examples-grpc-products',
     version='0.0.1',
     description='Store and serve products',
     author='nameko',

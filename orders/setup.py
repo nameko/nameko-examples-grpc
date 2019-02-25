@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="nameko-examples-orders",
+    name="nameko-examples-grpc-orders",
     version="0.0.1",
     description="Store and serve orders",
     packages=find_packages(exclude=["test", "test.*"]),

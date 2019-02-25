@@ -1,0 +1,18 @@
+FROM alpine:3.8
+
+RUN echo "http://uk.alpinelinux.org/alpine/v3.8/main/" >> /etc/apk/repositories && \
+    echo "@edge http://uk.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    echo "@testing http://uk.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
+RUN apk update && \
+    apk upgrade && \
+    apk add libssl1.0 libstdc++ && \
+    apk --no-cache add 'python3=3.6.6-r0' py-pip@edge ca-certificates musl \
+    readline@edge libressl@edge rlwrap@testing curl bash@edge && \
+    rm -rf /var/cache/apk/*
+
+RUN pip install --upgrade pip
+RUN pip install virtualenv
+
+RUN virtualenv -p python3 /appenv
+RUN . /appenv/bin/activate; pip install -U pip

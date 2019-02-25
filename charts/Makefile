@@ -1,4 +1,4 @@
-CONTEXT ?= minikube
+CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 TAG ?= latest
 
