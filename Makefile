@@ -1,7 +1,11 @@
 HTMLCOV_DIR ?= htmlcov
 
-IMAGES := orders products
-#IMAGES :=  products gateway
+PYTHON_IMAGES := orders products
+NODE_IMAGES := gateway
+IMAGES := $(PYTHON_IMAGES) $(NODE_IMAGES)
+
+CONTEXT ?= docker-for-desktop
+NAMESPACE ?= examples
 
 # gateway
 
@@ -34,12 +38,12 @@ build-wheel-builder: build-examples-base
 	docker build -t nameko-examples-grpc-builder -f docker/build.docker docker;
 
 run-wheel-builder: build-wheel-builder
-	for image in $(IMAGES) ; do \
+	for image in $(PYTHON_IMAGES) ; do \
 	rm -r $$image/wheelhouse || true; \
 	make -C $$image run-wheel-builder; \
 	done
 
-build-images: run-wheel-builder
+build-images: run-wheel-builder proto
 	for image in $(IMAGES) ; do make -C $$image build-image; done
 
 build: build-images
@@ -47,7 +51,7 @@ build: build-images
 docker-login:
 	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
 
-push-images: build
+push-images: # build
 	for image in $(IMAGES) ; do make -C $$image push-image; done
 
 products-proto:
@@ -87,3 +91,8 @@ develop-products: proto
 
 develop:
 	$(MAKE) -j2 develop-orders develop-products
+
+
+telepresence:
+	telepresence --context $(CONTEXT) \
+	--namespace $(NAMESPACE) --method vpn-tcp

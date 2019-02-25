@@ -17,20 +17,15 @@ spec:
         app: {{ .Chart.Name }}
     spec:
       containers:
-      - image: nameko/nameko-example-gateway:{{ .Values.image.tag }}
+      - image: {{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
         name: {{ .Chart.Name }}
         env:
-          - name: RABBIT_HOST
-            value: broker-rabbitmq
-          - name: RABBIT_MANAGEMENT_PORT
-            value: "15672"
-          - name: RABBIT_PORT
-            value: "5672"
-          - name: RABBIT_USER
-            value: user
-          - name: RABBIT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: broker-rabbitmq
-                key: rabbitmq-password
+          - name: ORDERS_PROTO_PATH
+            value: /home/node/app/proto/orders.proto
+          - name: PRODUCTS_PROTO_PATH
+            value: /home/node/app/proto/products.proto
+          - name: ORDERS_SERVICE
+            value: orders:50051
+          - name: PRODUCTS_SERVICE
+            value: products:50051
       restartPolicy: Always

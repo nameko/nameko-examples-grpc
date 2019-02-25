@@ -17,11 +17,13 @@ spec:
         app: {{ .Chart.Name }}
     spec:
       containers:
-      - image: nameko/nameko-example-products:{{ .Values.image.tag }}
+      - image: {{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
         name: {{ .Chart.Name }}
         env:
+          - name: GRPC_BIND_PORT
+            value: "50051"
           - name: REDIS_HOST
-            value: cache-redis
+            value: redis
           - name: REDIS_INDEX
             value: "11"
           - name: REDIS_PORT
@@ -29,7 +31,7 @@ spec:
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: cache-redis
+                name: redis
                 key: redis-password
           - name: RABBIT_HOST
             value: broker-rabbitmq

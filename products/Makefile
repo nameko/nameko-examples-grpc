@@ -1,4 +1,5 @@
-TAG ?= dev
+TAG ?= latest
+
 # docker
 
 run-wheel-builder:

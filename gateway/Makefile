@@ -1,3 +1,5 @@
+TAG ?= latest
+
 build:
 	npm run build
 
@@ -17,7 +19,13 @@ develop: build
 	$(MAKE) -j2 nodemon watch-ts
 
 build-image:
-	echo "todo"
+	cp -R ../proto proto
+	docker build -t jakubborys/nameko-examples-grpc-gateway:$(TAG) .;
+	rm -r proto
+
+push-image:
+	docker push jakubborys/nameko-examples-grpc-gateway:$(TAG)
+
 
 # queries
 

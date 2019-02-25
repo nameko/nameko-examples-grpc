@@ -1,5 +1,7 @@
 replicaCount: 1
 image:
   tag: latest
-ingressPort: 80
-servicePort: 8000
+  org: jakubborys
+  name: nameko-examples-grpc-gateway
+servicePort: 80
+gatewayPort: 4000

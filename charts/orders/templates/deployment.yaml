@@ -17,9 +17,11 @@ spec:
         app: {{ .Chart.Name }}
     spec:
       containers:
-      - image: nameko/nameko-example-orders:{{ .Values.image.tag }}
+      - image: {{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
         name: {{ .Chart.Name }}
         env:
+          - name: GRPC_BIND_PORT
+            value: "50051"
           - name: DB_HOST
             value: db-postgresql
           - name: DB_NAME
