@@ -4,13 +4,10 @@ TAG ?= dev
 run-wheel-builder:
 	docker run --rm \
 		-v "$$(pwd)":/application -v "$$(pwd)"/wheelhouse:/wheelhouse \
-		nameko-example-builder;
+		nameko-examples-grpc-builder;
 
 build-image:
-	docker build -t nameko/nameko-example-products:$(TAG) -f docker.run .;
+	docker build -t jakubborys/nameko-examples-grpc-products:$(TAG) .;
 
 push-image:
-	docker push nameko/nameko-example-products:$(TAG)
-
-start: build-proto
-	nameko run --config config.yaml products.service --backdoor 3000
+	docker push jakubborys/nameko-examples-grpc-products:$(TAG)

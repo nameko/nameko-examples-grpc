@@ -12,6 +12,8 @@ setup(
         "nameko-sqlalchemy==1.4.0",
         "alembic==1.0.7",
         "psycopg2==2.7.7",
+        "grpcio==1.18.0",
+        "googleapis-common-protos==1.5.8",
     ],
     extras_require={
         "dev": [

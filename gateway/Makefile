@@ -16,6 +16,9 @@ watch-ts:
 develop: build
 	$(MAKE) -j2 nodemon watch-ts
 
+build-image:
+	echo "todo"
+
 # queries
 
 create-product:

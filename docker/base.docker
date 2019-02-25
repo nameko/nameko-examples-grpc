@@ -6,13 +6,17 @@ RUN echo "http://uk.alpinelinux.org/alpine/v3.8/main/" >> /etc/apk/repositories 
 
 RUN apk update && \
     apk upgrade && \
-    apk add libssl1.0 libstdc++ && \
-    apk --no-cache add 'python3=3.6.6-r0' py-pip@edge ca-certificates musl \
-    readline@edge libressl@edge rlwrap@testing curl bash@edge && \
+    apk --no-cache add 'python3=3.6.6-r0' py-pip@edge libssl1.0 \
+    libstdc++ ca-certificates musl readline@edge libressl@edge \
+    rlwrap@testing curl bash@edge && \
     rm -rf /var/cache/apk/*
 
-RUN pip install --upgrade pip
-RUN pip install virtualenv
+RUN pip3 install --upgrade pip
+RUN pip3 install virtualenv
 
 RUN virtualenv -p python3 /appenv
+
+RUN echo 'manylinux1_compatible = True' \
+    > /appenv/lib/python3.6/site-packages/_manylinux.py
+
 RUN . /appenv/bin/activate; pip install -U pip

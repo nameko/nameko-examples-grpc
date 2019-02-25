@@ -4,7 +4,7 @@ RUN apk update && \
     apk upgrade && \
     apk --no-cache add alpine-sdk python3-dev@edge \
     postgresql-dev@edge libffi-dev openssl-dev automake \
-    autoconf libtool patchelf && \
+    autoconf libtool patchelf musl-dev linux-headers && \
     rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 RUN . /appenv/bin/activate; \

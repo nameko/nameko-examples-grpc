@@ -1,6 +1,9 @@
 HTMLCOV_DIR ?= htmlcov
 
-IMAGES := orders products gateway
+IMAGES := orders products
+#IMAGES :=  products gateway
+
+# gateway
 
 install-deps:
 	pip install -U -e "orders/.[dev]"
@@ -24,14 +27,17 @@ coverage: test coverage-report coverage-html
 
 # docker
 
-build-example-base:
-	docker build -t nameko-example-base -f docker/docker.base .;
+build-examples-base:
+	docker build -t nameko-examples-grpc-base -f docker/base.docker docker;
 
-build-wheel-builder: build-example-base
-	docker build -t nameko-example-builder -f docker/docker.build .;
+build-wheel-builder: build-examples-base
+	docker build -t nameko-examples-grpc-builder -f docker/build.docker docker;
 
 run-wheel-builder: build-wheel-builder
-	for image in $(IMAGES) ; do make -C $$image run-wheel-builder; done
+	for image in $(IMAGES) ; do \
+	rm -r $$image/wheelhouse || true; \
+	make -C $$image run-wheel-builder; \
+	done
 
 build-images: run-wheel-builder
 	for image in $(IMAGES) ; do make -C $$image build-image; done
