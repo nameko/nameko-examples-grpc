@@ -10,7 +10,7 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = 'dd33cb03d01f'
+revision = "dd33cb03d01f"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,7 +22,7 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.PrimaryKeyConstraint("id")
+        sa.PrimaryKeyConstraint("id"),
     )
 
     op.create_table(
@@ -36,8 +36,7 @@ def upgrade():
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.ForeignKeyConstraint(
-            ["order_id"], ["orders.id"],
-            name="fk_order_details_orders"
+            ["order_id"], ["orders.id"], name="fk_order_details_orders"
         ),
     )
 

@@ -1,0 +1,6 @@
+[tool.black]
+exclude = '''
+/(
+    .*/products_pb2_grpc.py
+)/
+'''

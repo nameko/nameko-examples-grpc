@@ -4,7 +4,7 @@ import redis
 from products.exceptions import NotFound
 
 
-REDIS_URI_KEY = 'REDIS_URI'
+REDIS_URI_KEY = "REDIS_URI"
 
 
 class StorageWrapper:
@@ -24,44 +24,41 @@ class StorageWrapper:
         self.client = client
 
     def _format_key(self, product_id):
-        return 'products:{}'.format(product_id)
+        return "products:{}".format(product_id)
 
     def _from_hash(self, document):
         return {
-            'id': document[b'id'].decode('utf-8'),
-            'title': document[b'title'].decode('utf-8'),
-            'passenger_capacity': int(document[b'passenger_capacity']),
-            'maximum_speed': int(document[b'maximum_speed']),
-            'in_stock': int(document[b'in_stock'])
+            "id": document[b"id"].decode("utf-8"),
+            "title": document[b"title"].decode("utf-8"),
+            "passenger_capacity": int(document[b"passenger_capacity"]),
+            "maximum_speed": int(document[b"maximum_speed"]),
+            "in_stock": int(document[b"in_stock"]),
         }
 
     def get(self, product_id):
         product = self.client.hgetall(self._format_key(product_id))
         if not product:
-            raise NotFound('Product ID {} does not exist'.format(product_id))
+            raise NotFound("Product ID {} does not exist".format(product_id))
         else:
             return self._from_hash(product)
 
     def list(self):
-        keys = self.client.keys(self._format_key('*'))
+        keys = self.client.keys(self._format_key("*"))
         for key in keys:
             yield self._from_hash(self.client.hgetall(key))
 
     def create(self, product):
-        self.client.hmset(
-            self._format_key(product['id']),
-            product)
+        self.client.hmset(self._format_key(product["id"]), product)
 
     def decrement_stock(self, product_id, amount):
-        return self.client.hincrby(
-            self._format_key(product_id), 'in_stock', -amount)
+        return self.client.hincrby(self._format_key(product_id), "in_stock", -amount)
 
 
 class Storage(DependencyProvider):
-
     def setup(self):
         self.client = redis.StrictRedis.from_url(
-            self.container.config.get(REDIS_URI_KEY))
+            self.container.config.get(REDIS_URI_KEY)
+        )
 
     def get_dependency(self, worker_ctx):
         return StorageWrapper(self.client)

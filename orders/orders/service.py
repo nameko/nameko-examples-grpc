@@ -4,7 +4,6 @@ from nameko_sqlalchemy import DatabaseSession
 
 from .exceptions import NotFound
 from .models import DeclarativeBase, Order, OrderDetail
-from .schemas import OrderSchema
 
 from .orders_pb2_grpc import ordersStub
 from .orders_pb2 import OrderResponse, OrderDetailResponse, OrderDeletedResponse
@@ -13,7 +12,7 @@ grpc = Grpc.implementing(ordersStub)
 
 
 class OrdersService:
-    name = 'orders'
+    name = "orders"
 
     db = DatabaseSession(DeclarativeBase)
     event_dispatcher = EventDispatcher()
@@ -23,7 +22,7 @@ class OrdersService:
         order = self.db.query(Order).get(request.id)
 
         if not order:
-            raise NotFound('Order with id {} not found'.format(request.id))
+            raise NotFound("Order with id {} not found".format(request.id))
 
         return self._order_response(order)
 
@@ -42,19 +41,14 @@ class OrdersService:
         self.db.add(order)
         self.db.commit()
 
-        order_created = OrderSchema().dump(order).data
-
-        self.event_dispatcher('order_created', {
-            'order': order_created,
-        })
+        self.event_dispatcher("order_created", {"order": order.to_dict()})
 
         return self._order_response(order)
 
     @grpc
     def update_order(self, request, context):
         order_details = {
-            order_details.id: order_details
-            for order_details in request.order_details
+            order_details.id: order_details for order_details in request.order_details
         }
 
         order = self.db.query(Order).get(request.id)
@@ -85,5 +79,5 @@ class OrdersService:
                     quantity=order_detail.quantity,
                 )
                 for order_detail in order.order_details
-            ]
+            ],
         )

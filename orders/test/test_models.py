@@ -11,16 +11,10 @@ def test_can_create_order(db_session):
 def test_can_create_order_detail(db_session):
     order = Order()
     order_detail_1 = OrderDetail(
-        order=order,
-        product_id="the_enigma",
-        price=100.50,
-        quantity=1
+        order=order, product_id="the_enigma", price=100.50, quantity=1
     )
     order_detail_2 = OrderDetail(
-        order=order,
-        product_id="the_odyssey",
-        price=99.50,
-        quantity=2
+        order=order, product_id="the_odyssey", price=99.50, quantity=2
     )
 
     db_session.add_all([order_detail_1, order_detail_2])

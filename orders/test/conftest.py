@@ -3,7 +3,7 @@ import pytest
 from orders.models import DeclarativeBase
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def db_url():
     """Overriding db_url fixture from `nameko_sqlalchemy`
 
@@ -14,7 +14,7 @@ def db_url():
 
     For more information see: https://github.com/onefinestay/nameko-sqlalchemy
     """
-    return 'sqlite:///orders.sql'
+    return "sqlite:///orders.sql"
 
 
 @pytest.fixture(scope="session")

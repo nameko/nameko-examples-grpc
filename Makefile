@@ -2,6 +2,10 @@ HTMLCOV_DIR ?= htmlcov
 
 IMAGES := orders products gateway
 
+install-deps:
+	pip install -U -e "orders/.[dev]"
+	pip install -U -e "products/.[dev]"
+
 # test
 
 coverage-html:

@@ -1,6 +1,8 @@
 import pytest
 
+from mock import call
 from nameko_grpc.client import Client
+from nameko.testing.services import replace_dependencies
 
 from orders.models import Order, OrderDetail
 from orders.service import OrdersService
@@ -18,24 +20,30 @@ from orders.orders_pb2 import (
 @pytest.fixture
 def config(rabbit_config, db_url):
     orders_config = rabbit_config.copy()
-    orders_config['DB_URIS'] = {'orders:Base': db_url}
+    orders_config["DB_URIS"] = {"orders:Base": db_url}
     return orders_config
 
 
 @pytest.fixture
-def service_container(config, container_factory):
+def mocked_dependencies():
+    return {}
+
+
+@pytest.fixture
+def service_container(config, container_factory, mocked_dependencies):
     container = container_factory(OrdersService, config)
+    mocked_dependencies["event_dispatcher"] = replace_dependencies(
+        container, "event_dispatcher"
+    )
     container.start()
+
     yield container
     container.stop()
 
 
 @pytest.fixture
 def client():
-    client = Client(
-        "//127.0.0.1:50051",
-        ordersStub
-    )
+    client = Client("//127.0.0.1:50051", ordersStub)
     yield client.start()
     client.stop()
 
@@ -44,12 +52,9 @@ def client():
 def order_data():
     return {
         "id": 1,
-        "order_details": [{
-            "id": 1,
-            "product_id": "the_odyssey",
-            "price": "20.50",
-            "quantity": 10
-        }]
+        "order_details": [
+            {"id": 1, "product_id": "the_odyssey", "price": "20.50", "quantity": 10}
+        ],
     }
 
 
@@ -57,16 +62,18 @@ def order_data():
 def order(db_session, order_data):
     order = Order(id=order_data["id"])
     db_session.add(order)
-    db_session.add_all([
-        OrderDetail(
-            order=order,
-            id=order_detail["id"],
-            product_id=order_detail["product_id"],
-            price=order_detail["price"],
-            quantity=order_detail["quantity"],
-        )
-        for order_detail in order_data["order_details"]
-    ])
+    db_session.add_all(
+        [
+            OrderDetail(
+                order=order,
+                id=order_detail["id"],
+                product_id=order_detail["product_id"],
+                price=order_detail["price"],
+                quantity=order_detail["quantity"],
+            )
+            for order_detail in order_data["order_details"]
+        ]
+    )
     db_session.commit()
     return order
 
@@ -82,7 +89,9 @@ def test_get_order(service_container, client, order):
     assert order_detail.quantity == retrieved_order_detail.quantity
 
 
-def test_create_order(db_session, service_container, client, order_data):
+def test_create_order(
+    db_session, service_container, client, order_data, mocked_dependencies
+):
     order_details = order_data["order_details"][0]
     created_order = client.create_order(
         CreateOrderRequest(
@@ -90,7 +99,7 @@ def test_create_order(db_session, service_container, client, order_data):
                 CreateOrderDetailRequest(
                     product_id=order_details["product_id"],
                     price=order_details["price"],
-                    quantity=order_details["quantity"]
+                    quantity=order_details["quantity"],
                 )
             ]
         )
@@ -105,6 +114,26 @@ def test_create_order(db_session, service_container, client, order_data):
     assert str(saved_order_details.price) == created_order_details.price
     assert saved_order_details.quantity == created_order_details.quantity
 
+    assert mocked_dependencies["event_dispatcher"].call_args_list == [
+        call(
+            "order_created",
+            {
+                "order": {
+                    "id": 1,
+                    "order_details": [
+                        {
+                            "id": 1,
+                            "order_id": 1,
+                            "product_id": "the_odyssey",
+                            "price": "20.50",
+                            "quantity": 10,
+                        }
+                    ],
+                }
+            },
+        )
+    ]
+
 
 def test_can_update_order(db_session, service_container, client, order):
     order_details = order.order_details[0]
@@ -117,9 +146,9 @@ def test_can_update_order(db_session, service_container, client, order):
                     id=order_details.id,
                     product_id=order_details.product_id,
                     price=str(order_details.price),
-                    quantity=original_quantity + 1
+                    quantity=original_quantity + 1,
                 )
-            ]
+            ],
         )
     )
     assert updated_order.order_details[0].quantity == original_quantity + 1

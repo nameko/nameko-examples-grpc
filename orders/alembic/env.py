@@ -28,10 +28,7 @@ target_metadata = DeclarativeBase.metadata
 
 
 def get_url():
-    return (
-        "postgresql://{db_user}:{db_pass}@{db_host}:"
-        "{db_port}/{db_name}"
-    ).format(
+    return ("postgresql://{db_user}:{db_pass}@{db_host}:" "{db_port}/{db_name}").format(
         db_user=os.getenv("DB_USER", "postgres"),
         db_pass=os.getenv("DB_PASSWORD", "password"),
         db_host=os.getenv("DB_HOST", "localhost"),
@@ -53,8 +50,7 @@ def run_migrations_offline():
 
     """
     url = get_url()
-    context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True)
+    context.configure(url=url, target_metadata=target_metadata, literal_binds=True)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -70,10 +66,7 @@ def run_migrations_online():
     connectable = create_engine(get_url())
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
