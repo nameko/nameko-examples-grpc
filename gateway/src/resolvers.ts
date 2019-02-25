@@ -17,7 +17,6 @@ const resolvers = {
     products: async () => {
       try {
         const response = await productsGrpcClient.listProductsAsync({});
-        logger.info(response.products);
         return response.products;
       } catch (error) {
         logger.error(error);
@@ -26,6 +25,18 @@ const resolvers = {
     order: async (_, { id }) => {
       try {
         const response = await ordersGrpcClient.getOrderAsync({ id });
+        return response;
+      } catch (error) {
+        logger.error(error);
+      }
+    },
+  },
+  OrderDetail: {
+    product: async parent => {
+      try {
+        const response = await productsGrpcClient.getProductAsync({
+          id: parent.productId,
+        });
         return response;
       } catch (error) {
         logger.error(error);

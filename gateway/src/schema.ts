@@ -11,8 +11,7 @@ const typeDefs = gql`
 
   type OrderDetail {
     id: ID!
-    # product: Product!
-    productId: String!
+    product: Product!
     price: String!
     quantity: Int!
   }
