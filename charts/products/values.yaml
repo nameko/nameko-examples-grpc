@@ -3,3 +3,4 @@ image:
   tag: latest
   org: jakubborys
   name: nameko-examples-grpc-products
+servicePort: 50051

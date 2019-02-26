@@ -30,7 +30,7 @@ const orderQueries = `mutation CreateOrder {
   createOrder(
     input: {
       orderDetails: {
-        productId: "goo",
+        productId: "the_odyssey",
         price: "105.99",
         quantity: 123
       }
@@ -39,7 +39,13 @@ const orderQueries = `mutation CreateOrder {
     id
     orderDetails {
       id
-      productId
+      product {
+        id
+        title
+        passengerCapacity
+        maximumSpeed
+        inStock
+      }
       price
       quantity
     }
@@ -51,7 +57,13 @@ query GetOrder {
     id
     orderDetails {
       id
-      productId
+      product {
+        id
+        title
+        passengerCapacity
+        maximumSpeed
+        inStock
+      }
       price
       quantity
     }
