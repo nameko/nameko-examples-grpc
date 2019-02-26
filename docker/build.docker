@@ -1,11 +1,8 @@
 FROM nameko-examples-grpc-base
 
-RUN apk update && \
-    apk upgrade && \
-    apk --no-cache add alpine-sdk python3-dev@edge \
-    postgresql-dev@edge libffi-dev openssl-dev automake \
-    autoconf libtool patchelf musl-dev linux-headers && \
-    rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install --yes build-essential autoconf libtool pkg-config \
+    libgflags-dev libgtest-dev clang libc++-dev automake git
 
 RUN . /appenv/bin/activate; \
     pip install auditwheel

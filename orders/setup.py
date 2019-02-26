@@ -8,12 +8,10 @@ setup(
     packages=find_packages(exclude=["test", "test.*"]),
     install_requires=[
         "nameko==2.11.0",
-        "nameko-grpc==1.0.0",
+        "nameko-grpc==1.0.1",
         "nameko-sqlalchemy==1.4.0",
         "alembic==1.0.7",
-        "psycopg2==2.7.7",
-        "grpcio==1.18.0",
-        "googleapis-common-protos==1.5.8",
+        "psycopg2-binary==2.7.7",
     ],
     extras_require={
         "dev": [

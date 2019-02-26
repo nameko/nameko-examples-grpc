@@ -1,3 +1,5 @@
 replicaCount: 1
 image:
   tag: latest
+  org: jakubborys
+  name: nameko-examples-grpc-products

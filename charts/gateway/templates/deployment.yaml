@@ -19,6 +19,7 @@ spec:
       containers:
       - image: {{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
         name: {{ .Chart.Name }}
+        imagePullPolicy: Always
         env:
           - name: ORDERS_PROTO_PATH
             value: /home/node/app/proto/orders.proto

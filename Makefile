@@ -1,8 +1,9 @@
 HTMLCOV_DIR ?= htmlcov
 
-PYTHON_IMAGES := orders products
-NODE_IMAGES := gateway
-IMAGES := $(PYTHON_IMAGES) $(NODE_IMAGES)
+PYTHON_IMAGES ?= orders products
+NODE_IMAGES ?= gateway
+IMAGES ?= $(PYTHON_IMAGES) $(NODE_IMAGES)
+TAG ?= $(shell git rev-parse HEAD)
 
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
@@ -39,20 +40,19 @@ build-wheel-builder: build-examples-base
 
 run-wheel-builder: build-wheel-builder
 	for image in $(PYTHON_IMAGES) ; do \
-	rm -r $$image/wheelhouse || true; \
 	make -C $$image run-wheel-builder; \
 	done
 
 build-images: run-wheel-builder proto
-	for image in $(IMAGES) ; do make -C $$image build-image; done
+	for image in $(IMAGES) ; do TAG=$(TAG) make -C $$image build-image; done
 
 build: build-images
 
 docker-login:
 	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
 
-push-images: # build
-	for image in $(IMAGES) ; do make -C $$image push-image; done
+push-images: build
+	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) push-image; done
 
 products-proto:
 	python -m grpc_tools.protoc \
@@ -92,6 +92,38 @@ develop-products: proto
 develop:
 	$(MAKE) -j2 develop-orders develop-products
 
+# Kubernetes
+
+deploy-postgresql:
+	helm upgrade $(NAMESPACE)-postgresql stable/postgresql \
+    --install --namespace=$(NAMESPACE) --kube-context=$(CONTEXT) \
+    --set fullnameOverride=postgresql \
+    --set resources.requests.cpu=10m \
+    --set resources.requests.memory=50Mi \
+    --set readinessProbe.initialDelaySeconds=60 \
+    --set livenessProbe.initialDelaySeconds=60;
+
+deploy-redis:
+	helm upgrade $(NAMESPACE)-redis stable/redis \
+    --install --namespace $(NAMESPACE) --kube-context=$(CONTEXT) \
+    --set fullnameOverride=redis \
+    --set cluster.enabled=false
+
+deploy-rabbitmq:
+	helm upgrade $(NAMESPACE)-rabbitmq stable/rabbitmq-ha \
+    --install --namespace=$(NAMESPACE) --kube-context=$(CONTEXT) \
+    --set fullnameOverride=rabbitmq \
+    --set image.tag=3.7-management-alpine \
+    --set replicaCount=1 \
+    --set persistentVolume.enabled=true \
+    --set updateStrategy=RollingUpdate \
+    --set rabbitmqMemoryHighWatermarkType=relative \
+    --set rabbitmqMemoryHighWatermark=0.5
+
+deploy-dependencies: deploy-postgresql deploy-redis deploy-rabbitmq
+
+deploy-services:
+	for image in $(IMAGES) ; do TAG=$(TAG) make -C charts install-$$image; done
 
 telepresence:
 	telepresence --context $(CONTEXT) \

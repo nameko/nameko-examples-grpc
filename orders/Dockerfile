@@ -1,9 +1,10 @@
 FROM nameko-examples-grpc-base
 
-RUN apk update && \
-    apk upgrade && \
-    apk --no-cache add postgresql-client && \
-    rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=891488
+RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/
+
+RUN apt-get update && \
+    apt-get install --yes postgresql-client
 
 ADD wheelhouse /var/nameko/wheelhouse
 
@@ -27,4 +28,4 @@ CMD . /appenv/bin/activate && \
     grep -q 1 || PGPASSWORD=${DB_PASSWORD} PGUSER=${DB_USER} PGHOST=${DB_HOST} \
     psql -c "CREATE DATABASE orders" && \
     alembic upgrade head && \
-    nameko run --config config.yml orders.service --backdoor 3000
+    nameko run --config config.yaml orders.service --backdoor 3000

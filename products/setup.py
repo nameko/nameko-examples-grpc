@@ -7,13 +7,7 @@ setup(
     description="Store and serve products",
     author="nameko",
     packages=find_packages(exclude=["test", "test.*"]),
-    install_requires=[
-        "nameko==2.11.0",
-        "redis==2.10.5",
-        "nameko-grpc==1.0.0",
-        "grpcio==1.18.0",
-        "googleapis-common-protos==1.5.8",
-    ],
+    install_requires=["nameko==2.11.0", "redis==2.10.5", "nameko-grpc==1.0.1"],
     extras_require={
         "dev": [
             "pytest==4.3.0",

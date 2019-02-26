@@ -42,8 +42,8 @@ lint-products: lint-chart
 install-gateway:
 	SERVICE_NAME=gateway $(MAKE) install-chart
 
-install-orders: SERVICE_NAME=orders
-install-orders: install-chart
+install-orders:
+	SERVICE_NAME=orders $(MAKE) install-chart
 
-install-products: SERVICE_NAME=products
-install-products: install-chart
+install-products:
+	SERVICE_NAME=products $(MAKE) install-chart
