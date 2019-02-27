@@ -4,9 +4,9 @@ from nameko_sqlalchemy import DatabaseSession
 
 from .exceptions import NotFound
 from .models import DeclarativeBase, Order, OrderDetail
-
+from .orders_pb2 import OrderDeletedResponse, OrderDetailResponse, OrderResponse
 from .orders_pb2_grpc import ordersStub
-from .orders_pb2 import OrderResponse, OrderDetailResponse, OrderDeletedResponse
+
 
 grpc = Grpc.implementing(ordersStub)
 

@@ -1,8 +1,10 @@
 from __future__ import with_statement
+
 import os
+from logging.config import fileConfig
+
 from alembic import context
 from sqlalchemy import create_engine
-from logging.config import fileConfig
 
 from orders.models import DeclarativeBase
 

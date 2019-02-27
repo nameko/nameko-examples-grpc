@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
+
 setup(
     name="nameko-examples-grpc-products",
     version="0.0.1",
@@ -15,6 +16,7 @@ setup(
             "flake8==3.7.6",
             "black==18.9b0",
             "grpcio-tools==1.18.0",
+            "isort==4.3.9",
         ]
     },
     zip_safe=True,

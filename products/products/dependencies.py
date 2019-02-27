@@ -1,5 +1,5 @@
-from nameko.extensions import DependencyProvider
 import redis
+from nameko.extensions import DependencyProvider
 
 from products.exceptions import NotFound
 

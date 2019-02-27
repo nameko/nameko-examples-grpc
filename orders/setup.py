@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
+
 setup(
     name="nameko-examples-grpc-orders",
     version="0.0.1",

@@ -1,10 +1,11 @@
 from nameko.events import event_handler
 from nameko_grpc.entrypoint import Grpc
 
-from .products_pb2_grpc import productsStub
-from .products_pb2 import Product, Products
-
 from products import dependencies
+
+from .products_pb2 import Product, Products
+from .products_pb2_grpc import productsStub
+
 
 grpc = Grpc.implementing(productsStub)
 

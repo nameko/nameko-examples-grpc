@@ -1,20 +1,19 @@
 import pytest
-
 from mock import call
-from nameko_grpc.client import Client
 from nameko.testing.services import replace_dependencies
+from nameko_grpc.client import Client
 
 from orders.models import Order, OrderDetail
-from orders.service import OrdersService
-from orders.orders_pb2_grpc import ordersStub
 from orders.orders_pb2 import (
-    GetOrderRequest,
-    CreateOrderRequest,
     CreateOrderDetailRequest,
-    UpdateOrderRequest,
-    UpdateOrderDetailRequest,
+    CreateOrderRequest,
     DeleteOrderRequest,
+    GetOrderRequest,
+    UpdateOrderDetailRequest,
+    UpdateOrderRequest,
 )
+from orders.orders_pb2_grpc import ordersStub
+from orders.service import OrdersService
 
 
 @pytest.fixture
