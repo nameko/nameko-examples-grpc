@@ -1,9 +1,10 @@
 TAG ?= latest
+DOCKER_HUB_ORG ?= jakubborys
 
 # docker
 
 build-image:
-	docker build -t jakubborys/nameko-examples-grpc-orders:$(TAG) .;
+	docker build -t $(DOCKER_HUB_ORG)/nameko-examples-grpc-orders:$(TAG) .;
 
 push-image:
-	docker push jakubborys/nameko-examples-grpc-orders:$(TAG)
+	docker push $(DOCKER_HUB_ORG)/nameko-examples-grpc-orders:$(TAG)

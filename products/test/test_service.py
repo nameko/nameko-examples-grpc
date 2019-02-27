@@ -1,13 +1,13 @@
-import pytest
-
 from unittest import TestCase
+
+import pytest
 from nameko.standalone.events import event_dispatcher
 from nameko.testing.services import entrypoint_waiter
-
-from products.service import ProductsService
 from nameko_grpc.client import Client
+
 from products.products_pb2 import GetProduct, GetProducts, Product
 from products.products_pb2_grpc import productsStub
+from products.service import ProductsService
 
 
 assert_items_equal = TestCase().assertCountEqual

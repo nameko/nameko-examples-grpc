@@ -7,25 +7,14 @@ TAG ?= $(shell git rev-parse HEAD)
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 
-install-python-dependencies:
+DOCKER_HUB_ORG ?= jakubborys
+
+install-dependencies:
 	pip install -U -e "orders/.[dev]"
 	pip install -U -e "products/.[dev]"
+	make -C gateway install
 
-# test
-
-test:
-	rm .coverage || true
-	flake8 orders products
-	coverage run --append -m pytest orders/test $(ARGS)
-	coverage run --append -m pytest products/test $(ARGS)
-
-coverage-report:
-	coverage report -m
-
-coverage-html:
-	coverage html --fail-under 100
-
-coverage: test coverage-report coverage-html
+# Generate Proto
 
 products-proto:
 	python -m grpc_tools.protoc \
@@ -51,32 +40,47 @@ orders-proto:
 
 proto: products-proto orders-proto
 
-# docker
-
-docker-login:
-	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
-
-build-images: proto
-	for image in $(IMAGES) ; do TAG=$(TAG) make -C $$image build-image; done
-
-push-images:
-	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) push-image; done
+# Run examples locally
 
 # Relies on `nodemon` nodejs utility installed globally:
 # `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
 
-develop-orders: proto
+develop-orders:
 	nodemon --ext py --watch orders/orders --watch orders/config.yaml \
 	--exec "nameko run --config orders/config.yaml orders.service"
 
-develop-products: proto
+develop-products:
 	nodemon --ext py --watch products/products --watch products/config.yaml --exec "nameko run --config products/config.yaml products.service"
 
 develop-gateway:
 	make -C gateway develop
 
-develop:
+develop: proto
 	$(MAKE) -j3 develop-orders develop-products develop-gateway
+
+# test
+
+test:
+	rm .coverage || true
+	flake8 orders products
+	coverage run --append -m pytest orders/test $(ARGS)
+	coverage run --append -m pytest products/test $(ARGS)
+
+coverage-report:
+	coverage report -m
+
+coverage-html:
+	coverage html --fail-under 100
+
+coverage: test coverage-report coverage-html
+
+# docker
+
+build-images: proto
+	for image in $(IMAGES) ; do TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) make -C $$image build-image; done
+
+push-images:
+	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) push-image; done
 
 # Kubernetes
 
@@ -109,7 +113,7 @@ deploy-rabbitmq:
 deploy-dependencies: deploy-postgresql deploy-redis deploy-rabbitmq
 
 deploy-services:
-	for image in $(IMAGES) ; do TAG=$(TAG) make -C charts install-$$image; done
+	for image in $(IMAGES) ; do TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) make -C charts install-$$image; done
 
 # https://www.telepresence.io
 

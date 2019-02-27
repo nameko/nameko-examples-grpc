@@ -7,62 +7,38 @@ logger.level = 'debug';
 const resolvers = {
   Query: {
     product: async (_, { id }) => {
-      try {
-        const response = await productsGrpcClient.getProductAsync({ id });
-        return response;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await productsGrpcClient.getProductAsync({ id });
+      return response;
     },
     products: async () => {
-      try {
-        const response = await productsGrpcClient.listProductsAsync({});
-        return response.products;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await productsGrpcClient.listProductsAsync({});
+      return response.products;
     },
     order: async (_, { id }) => {
-      try {
-        const response = await ordersGrpcClient.getOrderAsync({ id });
-        return response;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await ordersGrpcClient.getOrderAsync({ id });
+      return response;
     },
   },
   OrderDetail: {
     product: async parent => {
-      try {
-        const response = await productsGrpcClient.getProductAsync({
-          id: parent.productId,
-        });
-        return response;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await productsGrpcClient.getProductAsync({
+        id: parent.productId,
+      });
+      return response;
     },
   },
   Mutation: {
     createProduct: async (_, { input }) => {
-      try {
-        const response = await productsGrpcClient.createProductAsync({
-          ...input,
-        });
-        return response;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await productsGrpcClient.createProductAsync({
+        ...input,
+      });
+      return response;
     },
     createOrder: async (_, { input }) => {
-      try {
-        const response = await ordersGrpcClient.createOrderAsync({
-          ...input,
-        });
-        return response;
-      } catch (error) {
-        logger.error(error);
-      }
+      const response = await ordersGrpcClient.createOrderAsync({
+        ...input,
+      });
+      return response;
     },
   },
 };
