@@ -23,10 +23,10 @@ RUN . /appenv/bin/activate; \
 
 COPY . /application
 
-ENV PIP_WHEEL_DIR=/wheelhouse
-ENV PIP_FIND_LINKS=/wheelhouse
+ENV PIP_WHEEL_DIR=/application/wheelhouse
+ENV PIP_FIND_LINKS=/application/wheelhouse
 
-CMD . /appenv/bin/activate; \
+RUN . /appenv/bin/activate; \
     cd /application; \
     pip wheel ".[dev]"
 
