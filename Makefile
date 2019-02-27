@@ -1,33 +1,29 @@
 .PHONY: proto
 SHELL = /bin/bash
 
-HTMLCOV_DIR ?= htmlcov
-
 IMAGES ?= orders products gateway
 TAG ?= $(shell git rev-parse HEAD)
 
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 
-# gateway
-
-install-deps:
+install-python-dependencies:
 	pip install -U -e "orders/.[dev]"
 	pip install -U -e "products/.[dev]"
 
 # test
-
-coverage-html:
-	coverage html -d $(HTMLCOV_DIR) --fail-under 100
-
-coverage-report:
-	coverage report -m
 
 test:
 	rm .coverage || true
 	flake8 orders products
 	coverage run --append -m pytest orders/test $(ARGS)
 	coverage run --append -m pytest products/test $(ARGS)
+
+coverage-report:
+	coverage report -m
+
+coverage-html:
+	coverage html --fail-under 100
 
 coverage: test coverage-report coverage-html
 
