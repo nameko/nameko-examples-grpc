@@ -4,3 +4,19 @@ DB_URIS:
 AMQP_URI: amqp://${RABBIT_USER:guest}:${RABBIT_PASSWORD:guest}@${RABBIT_HOST:localhost}:${RABBIT_PORT:5672}/
 
 GRPC_BIND_PORT: ${GRPC_BIND_PORT:50052}
+
+LOGGING:
+    version: 1
+    disable_existing_loggers: False
+    formatters:
+        default:
+            format: "%(asctime)-15s [%(levelname)-4s] [orders] [%(name)-12s] %(message)s"
+    handlers:
+        default:
+            level: INFO
+            formatter: default
+            class: logging.StreamHandler
+    root:
+        level: INFO
+        propagate: True
+        handlers: [default]

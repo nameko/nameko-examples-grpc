@@ -76,8 +76,11 @@ develop-orders: proto
 develop-products: proto
 	nodemon --ext py --watch products/products --watch products/config.yaml --exec "nameko run --config products/config.yaml products.service"
 
+develop-gateway:
+	make -C gateway develop
+
 develop:
-	$(MAKE) -j2 develop-orders develop-products
+	$(MAKE) -j3 develop-orders develop-products develop-gateway
 
 # Kubernetes
 
