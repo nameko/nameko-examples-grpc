@@ -1,5 +1,8 @@
 TAG ?= latest
 
+install:
+	npm install --loglevel=error
+
 build:
 	npm run build
 
