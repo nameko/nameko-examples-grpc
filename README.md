@@ -4,9 +4,9 @@ This repository contains updated [Nameko Examples](https://github.com/nameko/nam
 
 ## Overview
 
-[gRPC](https://grpc.io/) is a _"A high-performance, open-source universal RPC framework"_ and a great tool when building modern Microservices architectures.  
+[gRPC](https://grpc.io/) is a _"A high-performance, open-source universal RPC framework"_ and a great tool when building modern Microservices Architectures.  
 
-Our example will demonstrate cross platform integration between NodeJS service exposing GraphQL API which will consume data from Nameko services exposing APIs over gRPC.
+Our example will demonstrate cross platform integration between NodeJS service exposing GraphQL API which will consume data from Nameko Services exposing gRPC APIs.
 
 High level architecure overview of our examples:
 
@@ -33,7 +33,7 @@ Once you're in context of your virtual environment you can install dependencies 
 ```sh
 $ make install-dependencies
 ```
-This will install both Python and Node dependencies.
+This will install both Python and NodeJS dependencies.
 
 ## Running Examples
 
@@ -84,11 +84,11 @@ Run `deploy-services` make target to deploy Gateway, Products and Orders service
 $ make deploy-services
 ```
 
-Once everything is deployed and you verified pods are successfully running, you can use [Telepresence](https://www.telepresence.io/) tool to easily access resources inside of your cluster.  
-Helper maker target `telepresence` will start new session
+Once everything is deployed and you verified pods are successfully running, use [Telepresence](https://www.telepresence.io/) tool to easily access resources inside of your cluster.  
+Run `telepresence` make target to start a new session
 
 ```sh
 $ make telepresence
 ```
 
-Now you should be able to navigate to http://gateway/playground to play with examples.
+Now you should be able to navigate to http://gateway/playground to play with the examples.
