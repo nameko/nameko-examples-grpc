@@ -1,6 +1,6 @@
 # Nameko gRPC Examples
 
-This repository contains updated [Nameko Examples](https://github.com/nameko/nameko-examples) that demonstrate usage of new [nameko-grpc](https://github.com/nameko/nameko-grpc) library.
+This repository contains updated [Nameko Examples](https://github.com/nameko/nameko-examples) that demonstrate usage of [nameko-grpc](https://github.com/nameko/nameko-grpc) library.
 
 ## Overview
 
