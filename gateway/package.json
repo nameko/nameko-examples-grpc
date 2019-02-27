@@ -1,7 +1,7 @@
 {
   "name": "gateway",
   "version": "1.0.0",
-  "description": "GraphQL gateway to gRPC services",
+  "description": "GraphQL gateway to gRPC Nameko services",
   "repository": "git@github.com:kooba/nameko-examples-grpc.git",
   "main": "index.js",
   "scripts": {
@@ -19,15 +19,15 @@
   "devDependencies": {
     "@types/graphql": "^14.0.7",
     "@types/node": "^11.9.4",
-    "grpc-tools": "^1.6.6",
     "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.3"
+    "tslint-config-prettier": "^1.18.0"
   },
   "dependencies": {
+    "typescript": "^3.3.3",
+    "grpc-tools": "^1.6.6",
     "@grpc/proto-loader": "^0.4.0",
     "apollo-server": "^2.4.2",
     "bluebird": "^3.5.3",

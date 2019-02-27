@@ -26,7 +26,6 @@ build-image:
 push-image:
 	docker push jakubborys/nameko-examples-grpc-gateway:$(TAG)
 
-
 # queries
 
 create-product:

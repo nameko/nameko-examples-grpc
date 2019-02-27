@@ -3,9 +3,7 @@ SHELL = /bin/bash
 
 HTMLCOV_DIR ?= htmlcov
 
-PYTHON_IMAGES ?= orders products
-NODE_IMAGES ?= gateway
-IMAGES ?= $(PYTHON_IMAGES) $(NODE_IMAGES)
+IMAGES ?= orders products gateway
 TAG ?= $(shell git rev-parse HEAD)
 
 CONTEXT ?= docker-for-desktop
@@ -33,30 +31,6 @@ test:
 
 coverage: test coverage-report coverage-html
 
-# docker
-
-build-examples-base:
-	docker build -t nameko-examples-grpc-base -f docker/base.docker docker;
-
-build-wheel-builder: build-examples-base
-	docker build -t nameko-examples-grpc-builder -f docker/build.docker docker;
-
-run-wheel-builder: build-wheel-builder
-	for image in $(PYTHON_IMAGES) ; do \
-	make -C $$image run-wheel-builder; \
-	done
-
-build-images: run-wheel-builder proto
-	for image in $(IMAGES) ; do TAG=$(TAG) make -C $$image build-image; done
-
-build: build-images
-
-docker-login:
-	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
-
-push-images: build
-	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) push-image; done
-
 products-proto:
 	python -m grpc_tools.protoc \
 	--proto_path=proto \
@@ -80,6 +54,17 @@ orders-proto:
 	@rm orders/orders/*.bak
 
 proto: products-proto orders-proto
+
+# docker
+
+docker-login:
+	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
+
+build-images: proto
+	for image in $(IMAGES) ; do TAG=$(TAG) make -C $$image build-image; done
+
+push-images:
+	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) push-image; done
 
 # Relies on `nodemon` nodejs utility installed globally:
 # `$ sudo npm install -g nodemon --unsafe-perm=true --allow-root`
