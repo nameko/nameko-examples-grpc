@@ -50,7 +50,7 @@ $ make develop
 
 All 3 services should be up and running now.
 
-## Executing sample queries
+## Sample Queries
 
 GraphQL Playground utility has also started and can be accessed on `http://localhost:4000/playground` url.
 
@@ -93,7 +93,7 @@ $ make telepresence
 
 Now you should be able to navigate to http://gateway/playground to play with the examples.
 
-## Build Docker Images
+## Building Docker Images
 
 When building docker images you can easily push them to your own Docker Hub Org by overriding default value of `DOCKER_HUB_ORG`:  
 ```sh
