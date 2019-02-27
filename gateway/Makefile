@@ -1,4 +1,5 @@
 TAG ?= latest
+DOCKER_HUB_ORG ?= jakubborys
 
 install:
 	npm install --loglevel=error
@@ -23,11 +24,11 @@ develop: build
 
 build-image:
 	cp -R ../proto proto
-	docker build -t jakubborys/nameko-examples-grpc-gateway:$(TAG) .;
+	docker build -t $(DOCKER_HUB_ORG)/nameko-examples-grpc-gateway:$(TAG) .;
 	rm -r proto
 
 push-image:
-	docker push jakubborys/nameko-examples-grpc-gateway:$(TAG)
+	docker push $(DOCKER_HUB_ORG)/nameko-examples-grpc-gateway:$(TAG)
 
 # queries
 

@@ -7,6 +7,8 @@ TAG ?= $(shell git rev-parse HEAD)
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 
+DOCKER_HUB_ORG ?= jakubborys
+
 install-dependencies:
 	pip install -U -e "orders/.[dev]"
 	pip install -U -e "products/.[dev]"
@@ -74,14 +76,11 @@ coverage: test coverage-report coverage-html
 
 # docker
 
-docker-login:
-	@docker login --email=$(DOCKER_EMAIL) --password=$(DOCKER_PASSWORD) --username=$(DOCKER_USERNAME)
-
 build-images: proto
-	for image in $(IMAGES) ; do TAG=$(TAG) make -C $$image build-image; done
+	for image in $(IMAGES) ; do TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) make -C $$image build-image; done
 
 push-images:
-	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) push-image; done
+	for image in $(IMAGES) ; do make -C $$image TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) push-image; done
 
 # Kubernetes
 
@@ -114,7 +113,7 @@ deploy-rabbitmq:
 deploy-dependencies: deploy-postgresql deploy-redis deploy-rabbitmq
 
 deploy-services:
-	for image in $(IMAGES) ; do TAG=$(TAG) make -C charts install-$$image; done
+	for image in $(IMAGES) ; do TAG=$(TAG) DOCKER_HUB_ORG=$(DOCKER_HUB_ORG) make -C charts install-$$image; done
 
 # https://www.telepresence.io
 

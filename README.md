@@ -92,3 +92,10 @@ $ make telepresence
 ```
 
 Now you should be able to navigate to http://gateway/playground to play with the examples.
+
+## Build Docker Images
+
+When building docker images you can easily push them to your own Docker Hub Org by overriding default value of `DOCKER_HUB_ORG`:  
+```sh
+DOCKER_HUB_ORG=my_org make build-images push-images deploy-services
+```
