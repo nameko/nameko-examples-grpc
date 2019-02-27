@@ -1,3 +1,6 @@
+.PHONY: proto
+SHELL = /bin/bash
+
 HTMLCOV_DIR ?= htmlcov
 
 PYTHON_IMAGES ?= orders products
@@ -76,7 +79,6 @@ orders-proto:
 	@sed -i.bak 's/^\(import.*_pb2\)/from . \1/' orders/orders/*grpc.py
 	@rm orders/orders/*.bak
 
-.PHONY: proto
 proto: products-proto orders-proto
 
 # Relies on `nodemon` nodejs utility installed globally:
@@ -124,6 +126,8 @@ deploy-dependencies: deploy-postgresql deploy-redis deploy-rabbitmq
 
 deploy-services:
 	for image in $(IMAGES) ; do TAG=$(TAG) make -C charts install-$$image; done
+
+# https://www.telepresence.io
 
 telepresence:
 	telepresence --context $(CONTEXT) \
