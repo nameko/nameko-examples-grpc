@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package products;
+
+service products {
+    rpc get_product(GetProduct) returns (Product);
+    rpc create_product(Product) returns (Product);
+    rpc list_products(GetProducts) returns (Products);
+}
+
+message Product {
+    string id = 1;
+    string title = 2;
+    int32 passenger_capacity = 3;
+    int32 maximum_speed = 4;
+    int32 in_stock = 5;
+}
+
+message Products {
+    repeated Product products = 1;
+}
+
+message GetProduct {
+    string id = 1;
+}
+
+message GetProducts {}

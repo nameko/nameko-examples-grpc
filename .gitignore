@@ -5,3 +5,7 @@ htmlcov
 .coverage
 */wheelhouse
 *.sql
+node_modules
+dist
+*_pb2*
+telepresence.log

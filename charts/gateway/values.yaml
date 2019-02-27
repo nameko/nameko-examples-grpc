@@ -1,0 +1,7 @@
+replicaCount: 1
+image:
+  tag: latest
+  org: jakubborys
+  name: nameko-examples-grpc-gateway
+servicePort: 80
+gatewayPort: 4000
