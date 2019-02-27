@@ -11,7 +11,7 @@ COPY tsconfig.json tsconfig.json
 ADD src src
 ADD proto proto
 
-RUN npm install --production
+RUN npm install --production --loglevel=error
 RUN npm run build
 
 EXPOSE 4000
