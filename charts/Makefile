@@ -1,7 +1,7 @@
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 TAG ?= latest
-DOCKER_HUB_ORG ?= jakubborys
+DOCKER_HUB_ORG ?= nameko
 
 deploy-namespace:
 	kubectl --context=$(CONTEXT) apply -f namespace.yaml
