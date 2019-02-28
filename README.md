@@ -8,14 +8,14 @@ This repository contains updated [Nameko Examples](https://github.com/nameko/nam
 
 Our example will demonstrate cross platform integration between NodeJS service exposing GraphQL API which will consume data from Nameko Services exposing gRPC APIs.
 
-High level architecure overview of our examples:
+High level architecture overview of our examples:
 
 ![Nameko gRPC examples](./images/architecture.png)
 
 We've got:
 - **Gateway** - NodeJS Service with GraphQL API.
-- **Orders** - Python Nameko Service with gRPC API and PostgreSQL as it's data store. This service will also publish `order_created` event.
-- **Products** - Python Nameko Service with gRPC API and Redis as it's data store. This service will also consume `order_created` event.
+- **Orders** - Python Nameko Service with gRPC API and PostgreSQL as its data store. This service will also publish `order_created` event.
+- **Products** - Python Nameko Service with gRPC API and Redis as its data store. This service will also consume `order_created` event.
 
 ## GraphQL Schema
 ![Nameko gRPC examples](./images/graphql-schema.png)
