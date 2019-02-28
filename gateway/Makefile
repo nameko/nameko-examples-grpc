@@ -1,5 +1,5 @@
 TAG ?= latest
-DOCKER_HUB_ORG ?= jakubborys
+DOCKER_HUB_ORG ?= nameko
 
 install:
 	npm install --loglevel=error

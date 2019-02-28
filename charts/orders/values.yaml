@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
   tag: latest
-  org: jakubborys
+  org: nameko
   name: nameko-examples-grpc-orders
 servicePort: 50051

@@ -7,7 +7,7 @@ TAG ?= $(shell git rev-parse HEAD)
 CONTEXT ?= docker-for-desktop
 NAMESPACE ?= examples
 
-DOCKER_HUB_ORG ?= jakubborys
+DOCKER_HUB_ORG ?= nameko
 
 install-dependencies:
 	pip install -U -e "orders/.[dev]"

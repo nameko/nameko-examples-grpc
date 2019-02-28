@@ -2,7 +2,7 @@
   "name": "gateway",
   "version": "1.0.0",
   "description": "GraphQL gateway to gRPC Nameko services",
-  "repository": "git@github.com:kooba/nameko-examples-grpc.git",
+  "repository": "git@github.com:nameko/nameko-examples-grpc.git",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
